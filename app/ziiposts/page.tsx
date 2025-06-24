@@ -1,7 +1,10 @@
 'use client';
 
-import ZiiPostFeed from "@/components/ZiiPostFeed";
 import { useEffect } from "react";
+import dynamic from "next/dynamic";
+
+// Dynamically load ZiiPostFeed to avoid build-time issues
+const ZiiPostFeed = dynamic(() => import("@/components/ZiiPostFeed"), { ssr: false });
 
 export default function ZiiPostsPage() {
   useEffect(() => {
@@ -13,7 +16,6 @@ export default function ZiiPostsPage() {
       <h1 className="text-3xl sm:text-4xl font-bold mb-6 text-center">🚀 Welcome to ZiiOZ</h1>
 
       <section className="mb-12">
-        {/* ✅ This is the key line that MUST be included */}
         <ZiiPostFeed />
       </section>
 
@@ -21,6 +23,5 @@ export default function ZiiPostsPage() {
         Powered by ZiiOZ • Street Visual Pty Ltd © {new Date().getFullYear()}
       </footer>
     </main>
-    // deploy trigger
   );
 }
