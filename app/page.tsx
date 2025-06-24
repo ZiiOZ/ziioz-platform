@@ -1,8 +1,6 @@
 'use client';
 
 import ZiiPostFeed from "../components/ZiiPostFeed";
-import ZiiFlickFeed from '@/components/ZiiFlickFeed'; // Optional
-import ZiiPayPreview from '@/components/ZiiPayPreview'; // Optional
 import { useEffect } from 'react';
 
 export default function HomePage() {
