@@ -1,73 +1,24 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { createClient } from '@supabase/supabase-js';
+import ZiiPostFeed from "@/components/ZiiPostFeed";
+import { useEffect } from "react";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
-
-type Post = {
-  id: string;
-  title?: string;
-  content?: string;
-  image_url?: string;
-  created_at: string;
-};
-
-export default function ZiiPostFeed() {
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [loading, setLoading] = useState(true);
-
+export default function ZiiPostsPage() {
   useEffect(() => {
-    const fetchPosts = async () => {
-      const { data, error } = await supabase
-        .from('posts')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error) {
-        console.error('Failed to fetch posts:', error.message);
-      } else {
-        setPosts(data || []);
-      }
-      setLoading(false);
-    };
-
-    fetchPosts();
+    window.scrollTo(0, 0);
   }, []);
 
-  if (loading) {
-    return <p className="text-center text-gray-500">Loading posts...</p>;
-  }
-
-  if (posts.length === 0) {
-    return (
-      <div className="border p-6 text-center text-gray-500">
-        <p>📭 No posts yet. Be the first to share something!</p>
-      </div>
-    );
-  }
-
   return (
-    <div className="space-y-6">
-      {posts.map((post) => (
-        <div key={post.id} className="border rounded-lg p-4 bg-white dark:bg-zinc-900 shadow">
-          {post.image_url && (
-            <img
-              src={post.image_url}
-              alt="Post"
-              className="w-full h-auto rounded mb-4"
-            />
-          )}
-          <h3 className="font-bold text-lg">{post.title || 'Untitled Post'}</h3>
-          <p>{post.content || 'No content provided.'}</p>
-          <p className="text-xs mt-2 text-gray-400">
-            Posted on {new Date(post.created_at).toLocaleString()}
-          </p>
-        </div>
-      ))}
-    </div>
+    <main className="min-h-screen px-4 py-10 sm:px-10 sm:py-16 bg-white text-black dark:bg-black dark:text-white">
+      <h1 className="text-3xl sm:text-4xl font-bold mb-6 text-center">🚀 Welcome to ZiiOZ</h1>
+
+      <section className="mb-12">
+        <ZiiPostFeed />
+      </section>
+
+      <footer className="text-center text-xs mt-20 opacity-50">
+        Powered by ZiiOZ • Street Visual Pty Ltd © {new Date().getFullYear()}
+      </footer>
+    </main>
   );
 }
