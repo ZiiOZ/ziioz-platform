@@ -10,10 +10,13 @@ export default function ZiiFlicksPage() {
   const [videos, setVideos] = useState<Video[]>([]);
 
   useEffect(() => {
-    // Replace this with your actual API or Supabase fetch
     fetch('/api/ziiflicks')
       .then((res) => res.json())
-      .then((data) => setVideos(data));
+      .then((data) => setVideos(data as Video[])) // 🔥 Fix: tell TypeScript this is our type
+      .catch((err) => {
+        console.error('Error loading ZiiFlicks:', err);
+        setVideos([]);
+      });
   }, []);
 
   return (
@@ -23,7 +26,12 @@ export default function ZiiFlicksPage() {
         <p>📭 No videos yet</p>
       ) : (
         videos.map((video) => (
-          <video key={video.id} src={video.url} controls className="mb-4 w-full" />
+          <video
+            key={video.id}
+            src={video.url}
+            controls
+            className="mb-4 w-full rounded-lg shadow-md"
+          />
         ))
       )}
     </div>
