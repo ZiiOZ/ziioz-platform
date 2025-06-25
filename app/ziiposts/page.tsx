@@ -1,4 +1,3 @@
-// app/ziiposts/page.tsx
-export default function ZiipostsPage() {
-  return <div>📮 ZiiPost Feed is loading...</div>;
+export default function PlaceholderPage() {
+  return <div style={{ padding: 40 }}>🚧 This page is under construction.</div>;
 }
