@@ -1,4 +1,3 @@
-// app/ziishop/page.tsx
-export default function ZiiShop() {
-  return <div>🛒 ZiiShop Placeholder</div>;
+export default function PlaceholderPage() {
+  return <div style={{ padding: 40 }}>🚧 This page is under construction.</div>;
 }
