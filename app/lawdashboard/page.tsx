@@ -1,3 +1,3 @@
-export default function ZiiFlicks() {
-  return <div>ZiiFlicks Placeholder - Loading OK</div>;
+export default function Placeholder() {
+  return <div>This route is safe ✅</div>;
 }
