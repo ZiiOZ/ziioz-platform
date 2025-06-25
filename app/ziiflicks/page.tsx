@@ -1,11 +1,17 @@
 'use client';
 import { useEffect, useState } from 'react';
 
+interface Video {
+  id: string;
+  url: string;
+}
+
 export default function ZiiFlicksPage() {
-  const [videos, setVideos] = useState([]);
+  const [videos, setVideos] = useState<Video[]>([]);
 
   useEffect(() => {
-    fetch('/api/ziiflicks') // or call Supabase directly here
+    // Replace this with your actual API or Supabase fetch
+    fetch('/api/ziiflicks')
       .then((res) => res.json())
       .then((data) => setVideos(data));
   }, []);
