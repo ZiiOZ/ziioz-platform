@@ -1,43 +1,35 @@
-import { VercelRequest, VercelResponse } from '@vercel/node';
+import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
-import { createClient } from '@supabase/supabase-js';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  apiVersion: '2023-10-16',
+});
 
-
-const supabase = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_KEY!
-);
-
-export default async function handler(req: VercelRequest, res: VercelResponse) {
-  if (req.method !== 'POST') return res.status(405).json({ error: 'Only POST allowed' });
-
-  const { user_id, email } = req.body;
-  if (!user_id || !email) return res.status(400).json({ error: 'Missing user_id or email' });
-
+export async function POST(req: Request) {
   try {
+    const { email } = await req.json();
+
+    // 1. Create Stripe Express Account
     const account = await stripe.accounts.create({
       type: 'express',
       email,
-      capabilities: { transfers: { requested: true } },
+      capabilities: {
+        card_payments: { requested: true },
+        transfers: { requested: true },
+      },
     });
 
-    await supabase
-      .from('profiles')
-      .update({ stripe_account_id: account.id })
-      .eq('id', user_id);
-
+    // 2. Generate onboarding link
     const accountLink = await stripe.accountLinks.create({
       account: account.id,
-      refresh_url: 'https://ziioz.com/ziipay',
-      return_url: 'https://ziioz.com/ziipay?success=true',
+      refresh_url: 'https://ziioz.com/creator-dashboard',
+      return_url: 'https://ziioz.com/creator-dashboard',
       type: 'account_onboarding',
     });
 
-    res.status(200).json({ url: accountLink.url });
-  } catch (err: any) {
-    console.error('Stripe error:', err.message);
-    res.status(500).json({ error: 'Stripe setup failed' });
+    return NextResponse.json({ url: accountLink.url });
+  } catch (error: any) {
+    console.error('Stripe error:', error.message);
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
