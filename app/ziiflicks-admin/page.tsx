@@ -81,4 +81,8 @@ export default function ZiiFlicksAdminPage() {
               Delete
             </button>
           </div>
-        </
+        </div>
+      ))}
+    </div>
+  );
+}
