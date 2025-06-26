@@ -1,17 +1,28 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { createClient } from '@supabase/supabase-js';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_KEY!
-);
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
 export default function ZiiFlicksAdminPage() {
   const [videos, setVideos] = useState<any[]>([]);
+  const [supabase, setSupabase] = useState<SupabaseClient | null>(null);
 
   useEffect(() => {
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_KEY) {
+      console.error("Missing Supabase env vars.");
+      return;
+    }
+
+    const client = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL,
+      process.env.NEXT_PUBLIC_SUPABASE_KEY
+    );
+    setSupabase(client);
+  }, []);
+
+  useEffect(() => {
+    if (!supabase) return;
+
     const fetchVideos = async () => {
       const { data, error } = await supabase
         .from('ziiflicks')
@@ -22,7 +33,22 @@ export default function ZiiFlicksAdminPage() {
     };
 
     fetchVideos();
-  }, []);
+  }, [supabase]);
+
+  const handleToggleVisibility = async (video: any) => {
+    if (!supabase) return;
+    await supabase
+      .from('ziiflicks')
+      .update({ visible: !video.visible })
+      .eq('id', video.id);
+    location.reload();
+  };
+
+  const handleDelete = async (video: any) => {
+    if (!supabase) return;
+    await supabase.from('ziiflicks').delete().eq('id', video.id);
+    location.reload();
+  };
 
   return (
     <div className="p-6">
@@ -43,29 +69,16 @@ export default function ZiiFlicksAdminPage() {
               className={`px-3 py-1 rounded text-white text-sm ${
                 video.visible ? 'bg-green-600' : 'bg-gray-400'
               }`}
-              onClick={async () => {
-                await supabase
-                  .from('ziiflicks')
-                  .update({ visible: !video.visible })
-                  .eq('id', video.id);
-                window.location.reload();
-              }}
+              onClick={() => handleToggleVisibility(video)}
             >
               {video.visible ? 'Set Private' : 'Set Public'}
             </button>
 
             <button
               className="bg-red-600 px-3 py-1 rounded text-white text-sm"
-              onClick={async () => {
-                await supabase.from('ziiflicks').delete().eq('id', video.id);
-                window.location.reload();
-              }}
+              onClick={() => handleDelete(video)}
             >
               Delete
             </button>
           </div>
-        </div>
-      ))}
-    </div>
-  );
-}
+        </
