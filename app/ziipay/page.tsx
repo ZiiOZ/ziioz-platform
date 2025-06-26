@@ -20,14 +20,14 @@ export default function ZiiPayPage() {
     if (data.url) {
       window.location.href = data.url;
     } else {
-      alert('ZiiPay failed to start.');
+      alert('ZiiPay onboarding failed.');
     }
   };
 
   return (
     <div className="p-6 max-w-xl mx-auto">
       <h1 className="text-2xl font-bold mb-4">🔐 ZiiPay Setup</h1>
-      <p className="mb-4">Connect your account to receive payments and payouts.</p>
+      <p className="mb-4">Connect your account to receive earnings & payouts.</p>
       <button
         onClick={startOnboarding}
         disabled={loading}
