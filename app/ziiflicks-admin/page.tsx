@@ -2,50 +2,49 @@
 export const dynamic = 'force-dynamic';
 
 import { useEffect, useState } from 'react';
-import { createClient } from '@supabase/supabase-js';
+import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
+import { useRouter } from 'next/navigation';
 
 export default function ZiiFlicksAdminPage() {
+  const session = useSession();
+  const supabase = useSupabaseClient();
+  const router = useRouter();
   const [videos, setVideos] = useState<any[]>([]);
 
+  // Protect route if not signed in
   useEffect(() => {
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_KEY!
-    );
+    if (!session) router.push('/signin');
+  }, [session]);
 
+  useEffect(() => {
     const fetchVideos = async () => {
       const { data, error } = await supabase
         .from('ziiflicks')
         .select('*')
         .order('created_at', { ascending: false });
-
       if (!error && data) setVideos(data);
     };
 
-    fetchVideos();
-  }, []);
+    if (session) fetchVideos();
+  }, [session, supabase]);
 
   const handleToggle = async (id: string, current: boolean) => {
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_KEY!
-    );
     await supabase.from('ziiflicks').update({ visible: !current }).eq('id', id);
     window.location.reload();
   };
 
   const handleDelete = async (id: string) => {
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_KEY!
-    );
     await supabase.from('ziiflicks').delete().eq('id', id);
     window.location.reload();
   };
 
+  if (!session) return <div>Redirecting...</div>;
+
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">🔐 ZiiFlicks Admin Panel</h1>
+      <h1 className="text-2xl font-bold mb-2">🔐 ZiiFlicks Admin Panel</h1>
+      {/* 👤 Optional signed-in email display */}
+      <p className="text-xs text-gray-500 mb-4">Signed in as: {session.user.email}</p>
 
       {videos.map((video) => (
         <div key={video.id} className="mb-6 border rounded p-4 bg-white shadow">
