@@ -1,50 +1,55 @@
 'use client';
+
 export const dynamic = 'force-dynamic';
 
 import { useEffect, useState } from 'react';
-import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
-import { useRouter } from 'next/navigation';
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
 
 export default function ZiiFlicksAdminPage() {
-  const session = useSession();
-  const supabase = useSupabaseClient();
-  const router = useRouter();
   const [videos, setVideos] = useState<any[]>([]);
-
-  // Protect route if not signed in
-  useEffect(() => {
-    if (!session) router.push('/signin');
-  }, [session]);
+  const [admin, setAdmin] = useState(false);
 
   useEffect(() => {
+    // TEMP: Basic Admin Check (Replace with Supabase Auth for production)
+    const checkAdmin = async () => {
+      const session = await supabase.auth.getSession();
+      const userEmail = session.data.session?.user.email;
+      if (userEmail === 'admin@ziioz.com') {
+        setAdmin(true);
+      }
+    };
+
+    checkAdmin();
+
     const fetchVideos = async () => {
       const { data, error } = await supabase
         .from('ziiflicks')
         .select('*')
         .order('created_at', { ascending: false });
+
       if (!error && data) setVideos(data);
     };
 
-    if (session) fetchVideos();
-  }, [session, supabase]);
+    fetchVideos();
+  }, []);
 
-  const handleToggle = async (id: string, current: boolean) => {
-    await supabase.from('ziiflicks').update({ visible: !current }).eq('id', id);
-    window.location.reload();
-  };
-
-  const handleDelete = async (id: string) => {
-    await supabase.from('ziiflicks').delete().eq('id', id);
-    window.location.reload();
-  };
-
-  if (!session) return <div>Redirecting...</div>;
+  if (!admin) {
+    return (
+      <div className="p-6">
+        <h1 className="text-xl font-bold text-red-600">Access Denied</h1>
+        <p>This page is restricted to administrators only.</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-2">🔐 ZiiFlicks Admin Panel</h1>
-      {/* 👤 Optional signed-in email display */}
-      <p className="text-xs text-gray-500 mb-4">Signed in as: {session.user.email}</p>
+    <div className="p-6 max-w-4xl mx-auto">
+      <h1 className="text-2xl font-bold mb-6">🔐 ZiiFlicks Admin Panel</h1>
 
       {videos.map((video) => (
         <div key={video.id} className="mb-6 border rounded p-4 bg-white shadow">
@@ -61,14 +66,23 @@ export default function ZiiFlicksAdminPage() {
               className={`px-3 py-1 rounded text-white text-sm ${
                 video.visible ? 'bg-green-600' : 'bg-gray-400'
               }`}
-              onClick={() => handleToggle(video.id, video.visible)}
+              onClick={async () => {
+                await supabase
+                  .from('ziiflicks')
+                  .update({ visible: !video.visible })
+                  .eq('id', video.id);
+                window.location.reload();
+              }}
             >
               {video.visible ? 'Set Private' : 'Set Public'}
             </button>
 
             <button
               className="bg-red-600 px-3 py-1 rounded text-white text-sm"
-              onClick={() => handleDelete(video.id)}
+              onClick={async () => {
+                await supabase.from('ziiflicks').delete().eq('id', video.id);
+                window.location.reload();
+              }}
             >
               Delete
             </button>
