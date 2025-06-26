@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
 import { useUser } from '@supabase/auth-helpers-react';
+import { useState } from 'react';
 
 export default function ZiiPayPage() {
   const user = useUser();
@@ -17,18 +17,17 @@ export default function ZiiPayPage() {
 
     const data = await res.json();
     setLoading(false);
-
     if (data.url) {
       window.location.href = data.url;
     } else {
-      alert('ZiiPay onboarding failed.');
+      alert('ZiiPay failed to start.');
     }
   };
 
   return (
     <div className="p-6 max-w-xl mx-auto">
       <h1 className="text-2xl font-bold mb-4">🔐 ZiiPay Setup</h1>
-      <p className="mb-4">Connect your account to receive earnings & payouts.</p>
+      <p className="mb-4">Connect your account to receive payments and payouts.</p>
       <button
         onClick={startOnboarding}
         disabled={loading}
