@@ -1,41 +1,43 @@
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2024-08-01',
+  apiVersion: '2025-05-28.basil',
 });
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_KEY!
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
 
 export async function POST(req: NextRequest) {
+  const body = await req.text();
   const sig = req.headers.get('stripe-signature')!;
-  const rawBody = await req.text();
+  const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
-  let event;
+  let event: Stripe.Event;
+
   try {
-    event = stripe.webhooks.constructEvent(
-      rawBody,
-      sig,
-      process.env.STRIPE_WEBHOOK_SECRET!
-    );
+    event = stripe.webhooks.constructEvent(body, sig, endpointSecret);
   } catch (err: any) {
-    console.error('Webhook signature verification failed:', err.message);
-    return new Response(`Webhook Error: ${err.message}`, { status: 400 });
+    console.error('Webhook verification failed:', err.message);
+    return new NextResponse(`Webhook Error: ${err.message}`, { status: 400 });
   }
 
-  if (event.type === 'account.updated') {
-    const account = event.data.object as Stripe.Account;
-    if (account.details_submitted) {
-      await supabase
-        .from('profiles')
-        .update({ onboarding_complete: true })
-        .eq('stripe_account_id', account.id);
-    }
+  // ✅ Handle Stripe event types
+  if (event.type === 'checkout.session.completed') {
+    const session = event.data.object as Stripe.Checkout.Session;
+
+    await supabase.from('payments').insert([
+      {
+        stripe_session_id: session.id,
+        email: session.customer_email,
+        amount_total: session.amount_total,
+        created_at: new Date().toISOString(),
+      },
+    ]);
   }
 
-  return new Response(JSON.stringify({ received: true }), { status: 200 });
+  return new NextResponse('Webhook received', { status: 200 });
 }
