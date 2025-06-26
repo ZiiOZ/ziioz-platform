@@ -1,3 +1,0 @@
-experimental: {
-  serverActions: true
-}
