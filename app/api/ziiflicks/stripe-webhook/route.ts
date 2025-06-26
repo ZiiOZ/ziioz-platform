@@ -1,45 +1,45 @@
-import { NextRequest, NextResponse } from 'next/server';
-import Stripe from 'stripe';
+import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-05-28.basil',
-});
+export const dynamic = 'force-dynamic';
 
-const supabase = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_KEY!
-);
+export async function POST(req: Request) {
+  const body = await req.text(); // Get raw body for Stripe signature
+  const sig = req.headers.get('stripe-signature') || '';
 
+  // Lazy import Stripe so it's not invoked at build time
+  const { default: Stripe } = await import('stripe');
 
+  const stripe = new Stripe(process.env.STRIPE_WEBHOOK_SECRET!, {
+    apiVersion: '2023-10-16',
+  });
 
-export async function POST(req: NextRequest) {
-  const body = await req.text();
-  const sig = req.headers.get('stripe-signature')!;
-  const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!;
-
-  let event: Stripe.Event;
+  let event;
 
   try {
-    event = stripe.webhooks.constructEvent(body, sig, endpointSecret);
+    event = stripe.webhooks.constructEvent(
+      body,
+      sig,
+      process.env.STRIPE_WEBHOOK_SECRET!
+    );
   } catch (err: any) {
-    console.error('Webhook verification failed:', err.message);
+    console.error('Webhook signature verification failed.', err.message);
     return new NextResponse(`Webhook Error: ${err.message}`, { status: 400 });
   }
 
-  // ✅ Handle Stripe event types
-  if (event.type === 'checkout.session.completed') {
-    const session = event.data.object as Stripe.Checkout.Session;
+  // Connect Supabase using private service key
+  const supabase = createClient(
+    process.env.SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_KEY!
+  );
 
-    await supabase.from('payments').insert([
-      {
-        stripe_session_id: session.id,
-        email: session.customer_email,
-        amount_total: session.amount_total,
-        created_at: new Date().toISOString(),
-      },
-    ]);
+  // Optional: handle event type
+  if (event.type === 'checkout.session.completed') {
+    const session = event.data.object;
+    console.log('✅ Checkout session:', session);
+
+    // Optional insert to Supabase or logging
   }
 
-  return new NextResponse('Webhook received', { status: 200 });
+  return NextResponse.json({ received: true });
 }
