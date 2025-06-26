@@ -1,33 +1,23 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2023-10-16' as const,
 });
 
-});
-
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
-    const { connectedAccountId, amountInCents } = await req.json();
+    const { connected_account_id, amount } = await req.json();
 
-    if (!connectedAccountId || !amountInCents) {
-      return NextResponse.json({ error: 'Missing payout details' }, { status: 400 });
-    }
+    const transfer = await stripe.transfers.create({
+      amount,
+      currency: 'usd',
+      destination: connected_account_id,
+    });
 
-    const payout = await stripe.payouts.create(
-      {
-        amount: amountInCents,
-        currency: 'usd',
-      },
-      {
-        stripeAccount: connectedAccountId,
-      }
-    );
-
-    return NextResponse.json({ success: true, payout });
-  } catch (error: any) {
-    console.error('Payout error:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ success: true, transfer });
+  } catch (error) {
+    console.error('[PAYOUT ERROR]', error);
+    return NextResponse.json({ error: 'Payout failed' }, { status: 500 });
   }
 }
