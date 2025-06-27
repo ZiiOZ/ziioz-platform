@@ -11,6 +11,7 @@ export default function AuthBootstrap() {
     const insertUserIfNeeded = async () => {
       if (!session?.user) return;
 
+      const { data, error } = await supabase
         .from('users')
         .select('id')
         .eq('id', session.user.id)
