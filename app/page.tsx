@@ -3,7 +3,6 @@
 export const dynamic = 'force-dynamic';
 
 import { useEffect, useState } from 'react';
-import { createClient } from '@supabase/supabase-js';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -15,7 +14,6 @@ export default function ZiiFlicksAdminPage() {
 
   useEffect(() => {
     const fetchVideos = async () => {
-      const { data, error } = await supabase
         .from('ziiflicks')
         .select('*')
         .order('created_at', { ascending: false });
@@ -46,7 +44,6 @@ export default function ZiiFlicksAdminPage() {
                 video.visible ? 'bg-green-600' : 'bg-gray-400'
               }`}
               onClick={async () => {
-                await supabase
                   .from('ziiflicks')
                   .update({ visible: !video.visible })
                   .eq('id', video.id);
