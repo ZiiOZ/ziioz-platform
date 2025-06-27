@@ -10,7 +10,6 @@ export default function SignInPage() {
   const router = useRouter();
 
   const handleLogin = async () => {
-    const { error } = await supabase.auth.signInWithOtp({ email });
     if (error) alert('Error sending magic link');
     else alert('Check your email for the magic sign-in link!');
   };

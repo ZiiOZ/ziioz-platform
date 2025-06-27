@@ -16,7 +16,6 @@ export default function ZiiFlicksAdminPage() {
   useEffect(() => {
     // TEMP: Basic Admin Check (Replace with Supabase Auth for production)
     const checkAdmin = async () => {
-      const session = await supabase.auth.getSession();
       const userEmail = session.data.session?.user.email;
       if (userEmail === 'admin@ziioz.com') {
         setAdmin(true);
