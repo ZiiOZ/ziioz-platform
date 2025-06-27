@@ -1,8 +1,7 @@
-'use client';
+import { createClient } from '@supabase/supabase-js';
 
-import { createPagesBrowserClient } from '@supabase/auth-helpers-nextjs';
-import { type SupabaseClient } from '@supabase/supabase-js';
-import type { Database } from '../types/supabase';
-
-
-export const supabase: SupabaseClient<Database> = createPagesBrowserClient<Database>();
+export const createServerSupabaseClient = () =>
+  createClient(
+    process.env.SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
