@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Missing email' }, { status: 400 });
     }
 
-    const supabase = createServerSupabaseClient(); // ✅ fixed safe usage
+    const supabase = createServerSupabaseClient(); // ✅ build-safe
 
     const account = await stripe.accounts.create({
       type: 'standard',
