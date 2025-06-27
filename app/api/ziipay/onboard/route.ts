@@ -1,4 +1,3 @@
-import { createServerSupabaseClient } from '@/lib/supabase/supabaseClient';
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
@@ -14,7 +13,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Missing email' }, { status: 400 });
     }
 
-    const supabase = createServerSupabaseClient(); // ✅ build-safe
+    // ✅ Supabase is NOT required here — remove it entirely
 
     const account = await stripe.accounts.create({
       type: 'standard',
@@ -27,7 +26,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ success: true, accountId: account.id }, { status: 200 });
   } catch (err: any) {
-    console.error('Onboard error:', err.message || err);
+    console.error('ZiiPay Onboard Error:', err.message || err);
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
