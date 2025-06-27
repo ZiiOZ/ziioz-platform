@@ -6,7 +6,6 @@ import LogoutButton from '@/components/LogoutButton';
 
 export default function ZiiPostsPage() {
   const session = useSession();
-  const supabase = useSupabaseClient();
   const router = useRouter();
 
   // 🔐 Redirect if not logged in

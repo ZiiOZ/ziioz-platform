@@ -4,8 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import LogoutButton from '@/components/LogoutButton';
 
-export default function ZiiFlicksUploadPage() {
-  const supabase = useSupabaseClient();
+export default function ZiiFlicksUploadPage()
   const session = useSession();
   const router = useRouter();
   const [videos, setVideos] = useState<any[]>([]);
@@ -41,19 +40,11 @@ export default function ZiiFlicksUploadPage() {
     const fileName = `${Date.now()}.${fileExt}`;
     const filePath = `videos/${fileName}`;
 
-    const { error: uploadError } = await supabase.storage
-      .from('ziiflicks')
-      .upload(filePath, file);
-
     if (uploadError) {
       alert('Upload failed');
       setUploading(false);
       return;
     }
-
-    const { data: publicUrlData } = supabase.storage
-      .from('ziiflicks')
-      .getPublicUrl(filePath);
 
     const videoUrl = publicUrlData?.publicUrl;
 

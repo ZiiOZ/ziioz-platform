@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 
 export default function ZiiFlicksPublicPage() {
-  const supabase = createClientComponentClient();
   const [videos, setVideos] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 

@@ -8,7 +8,6 @@ export default function AuthPage() {
 
   useEffect(() => {
     const checkSession = async () => {
-      // Supabase session check removed
       // You can add custom logic here if needed
     };
 
@@ -16,7 +15,6 @@ export default function AuthPage() {
   }, [router]);
 
   const handleLogin = async () => {
-    // Supabase OAuth login removed
     alert('Login functionality has been disabled.');
   };
 
