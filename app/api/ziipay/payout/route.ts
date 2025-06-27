@@ -2,9 +2,13 @@ import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  // force override TS type mismatch
-  apiVersion: '2023-10-16' as unknown as Stripe.StripeConfig['apiVersion'],
+  // Force cast to avoid type error
+  apiVersion: '2023-10-16' as any,
 });
+
+export async function POST(req: Request) {
+  // your logic here
+}
 
 
 
