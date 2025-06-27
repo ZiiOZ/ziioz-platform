@@ -13,8 +13,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Missing email' }, { status: 400 });
     }
 
-    // ✅ Supabase is NOT required here — remove it entirely
-
     const account = await stripe.accounts.create({
       type: 'standard',
       email,
