@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useRouter } from 'next/navigation';
 import LogoutButton from '@/components/LogoutButton';
 
