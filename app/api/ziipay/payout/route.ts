@@ -6,12 +6,6 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2023-10-16' as any,
 });
 
-export async function POST(req: Request) {
-  // your logic here
-}
-
-
-
 export async function POST(req: NextRequest) {
   try {
     const { accountId, amount } = await req.json();
@@ -20,10 +14,9 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Missing accountId or amount' }, { status: 400 });
     }
 
-    // Optional: validate amount boundaries
     const payout = await stripe.payouts.create(
       {
-        amount: Math.round(amount), // in cents
+        amount: Math.round(amount), // cents
         currency: 'usd',
       },
       {
