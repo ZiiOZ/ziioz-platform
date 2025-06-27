@@ -13,18 +13,9 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Missing email' }, { status: 400 });
     }
 
-    const account = await stripe.accounts.create({
-      type: 'standard',
-      email,
-      capabilities: {
-        card_payments: { requested: true },
-        transfers: { requested: true },
-      },
-    });
-
-    return NextResponse.json({ success: true, accountId: account.id }, { status: 200 });
+    return NextResponse.json({ success: true });
   } catch (err: any) {
-    console.error('ZiiPay Onboard Error:', err.message || err);
+    console.error('Error:', err);
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
