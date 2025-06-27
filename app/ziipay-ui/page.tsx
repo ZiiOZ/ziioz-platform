@@ -1,10 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { useUser } from '@supabase/auth-helpers-react';
 
 export default function ZiiPayPage() {
-  const user = useUser();
   const [loading, setLoading] = useState(false);
 
   const handleZiiPayStart = async () => {
@@ -13,31 +11,18 @@ export default function ZiiPayPage() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        user_id: user?.id,
-        email: user?.email,
+        // Add your payload here if needed
       }),
     });
 
-    const data = await res.json();
+    // handle response...
     setLoading(false);
-
-    if (data.url) {
-      window.location.href = data.url;
-    } else {
-      alert('ZiiPay onboarding failed.');
-    }
   };
 
   return (
-    <div className="p-6 max-w-xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">🔐 ZiiPay Setup</h1>
-      <p className="mb-4">Connect your account to receive payments and payouts.</p>
-      <button
-        onClick={handleZiiPayStart}
-        disabled={loading}
-        className="bg-black text-white px-4 py-2 rounded-xl hover:opacity-90"
-      >
-        {loading ? 'Redirecting...' : 'Start ZiiPay Onboarding'}
+    <div>
+      <button onClick={handleZiiPayStart} disabled={loading}>
+        {loading ? 'Loading...' : 'Start ZiiPay'}
       </button>
     </div>
   );
