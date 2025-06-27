@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
+import { createServerSupabaseClient } from '@/lib/supabase/serverClient';
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
@@ -7,36 +7,31 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 });
 
 export async function POST(req: NextRequest) {
-  const supabase = createClient(
-    process.env.SUPABASE_URL!,       // ✅ server-side key
-    process.env.SUPABASE_SERVICE_ROLE_KEY!  // ✅ not NEXT_PUBLIC_
-  );
+  const supabase = createServerSupabaseClient(); // ✅ build-safe
 
   try {
-    const { email } = await req.json();
+    const { accountId, amount } = await req.json();
 
-    if (!email) {
-      return NextResponse.json({ error: 'Missing email' }, { status: 400 });
+    if (!accountId || !amount) {
+      return NextResponse.json({ error: 'Missing accountId or amount' }, { status: 400 });
     }
 
-    const account = await stripe.accounts.create({
-      type: 'standard',
-      email,
-    });
+    const payout = await stripe.payouts.create(
+      {
+        amount: Math.round(amount),
+        currency: 'usd',
+      },
+      {
+        stripeAccount: accountId,
+      }
+    );
 
-    const accountLink = await stripe.accountLinks.create({
-      account: account.id,
-      refresh_url: 'https://ziioz.com/ziipay',
-      return_url: 'https://ziioz.com/ziipay',
-      type: 'account_onboarding',
-    });
+    // optional: log to Supabase or verify account ownership
+    // await supabase.from('payout_logs').insert(...);
 
-    // optional: save Stripe account ID to Supabase
-    await supabase.from('users').update({ stripe_account_id: account.id }).eq('email', email);
-
-    return NextResponse.json({ url: accountLink.url }, { status: 200 });
+    return NextResponse.json({ success: true, payout }, { status: 200 });
   } catch (err: any) {
-    console.error('Onboard error:', err.message);
+    console.error('Payout error:', err.message);
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
