@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 
 export default function ZiiFlicksPublicPage() {
   const supabase = createClientComponentClient();
@@ -10,7 +9,6 @@ export default function ZiiFlicksPublicPage() {
 
   useEffect(() => {
     const fetchPublicVideos = async () => {
-      const { data, error } = await supabase
         .from('ziiflicks')
         .select('*')
         .eq('is_visible', true)

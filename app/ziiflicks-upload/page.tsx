@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useRouter } from 'next/navigation';
 import LogoutButton from '@/components/LogoutButton';
 
@@ -23,7 +22,6 @@ export default function ZiiFlicksUploadPage() {
   const isAdmin = session?.user?.email === 'youradmin@email.com'; // ✅ update this
 
   const fetchVideos = async () => {
-    const { data, error } = await supabase
       .from('ziiflicks')
       .select('*')
       .order('created_at', { ascending: false });
@@ -59,7 +57,6 @@ export default function ZiiFlicksUploadPage() {
 
     const videoUrl = publicUrlData?.publicUrl;
 
-    const { error: insertError } = await supabase
       .from('ziiflicks')
       .insert([{ video_url: videoUrl, is_visible: true }]);
 
@@ -72,7 +69,6 @@ export default function ZiiFlicksUploadPage() {
   };
 
   const toggleVisibility = async (id: string, current: boolean) => {
-    await supabase
       .from('ziiflicks')
       .update({ is_visible: !current })
       .eq('id', id);
