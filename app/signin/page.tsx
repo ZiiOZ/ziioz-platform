@@ -1,39 +1,38 @@
-// app/signin/page.tsx
 'use client';
 
-import { useState } from 'react';
+import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 export default function SignInPage() {
   const [email, setEmail] = useState('');
   const session = useSession();
+  const supabase = useSupabaseClient();
   const router = useRouter();
 
   const handleLogin = async () => {
-    if (error) alert('Error sending magic link');
-    else alert('Check your email for the magic sign-in link!');
+    await supabase.auth.signInWithOtp({ email });
   };
 
   if (session) {
-    router.push('/ziiflicks-admin');
-    return <p>Redirecting...</p>;
+    router.push('/ziiflicks-upload');
   }
 
   return (
-    <div className="p-6 max-w-sm mx-auto">
-      <h1 className="text-xl font-bold mb-4">🔐 ZiiOZ Admin Sign In</h1>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 px-4">
+      <h1 className="text-2xl font-bold mb-4">Sign in to ZiiOZ</h1>
       <input
         type="email"
-        placeholder="Enter your email"
-        className="w-full p-2 border rounded mb-4"
+        placeholder="Your email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
+        className="border border-gray-300 px-4 py-2 rounded mb-4"
       />
       <button
         onClick={handleLogin}
-        className="w-full bg-blue-600 text-white p-2 rounded"
+        className="bg-black text-white px-6 py-3 rounded hover:bg-gray-800"
       >
-        Send Magic Link
+        Sign in
       </button>
     </div>
   );
