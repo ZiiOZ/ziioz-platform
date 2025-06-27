@@ -1,4 +1,4 @@
-import { createServerSupabaseClient } from '@/lib/supabase/serverClient';
+import { createServerSupabaseClient } from '@/lib/supabase/supabaseClient';
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 

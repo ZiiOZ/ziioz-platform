@@ -1,4 +1,4 @@
-import { createServerSupabaseClient } from '@/lib/supabase/serverClient';
+import { createServerSupabaseClient } from '@/lib/supabase/supabaseClient';
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
@@ -7,14 +7,21 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 });
 
 export async function POST(req: NextRequest) {
-  const supabase = createServerSupabaseClient(); // ✅ build-safe
-
   try {
-    const { accountId, amount } = await req.json();
+    const body = await req.json();
+
+    const accountId = body?.accountId;
+    const amount = body?.amount;
 
     if (!accountId || !amount) {
-      return NextResponse.json({ error: 'Missing accountId or amount' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'Missing accountId or amount' },
+        { status: 400 }
+      );
     }
+
+    // Optional: Create supabase client (if needed later)
+    const supabase = createServerSupabaseClient();
 
     const payout = await stripe.payouts.create(
       {
@@ -26,12 +33,12 @@ export async function POST(req: NextRequest) {
       }
     );
 
-    // optional: log to Supabase or verify account ownership
-    // await supabase.from('payout_logs').insert(...);
-
     return NextResponse.json({ success: true, payout }, { status: 200 });
   } catch (err: any) {
-    console.error('Payout error:', err.message);
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    console.error('Payout error:', err.message || err);
+    return NextResponse.json(
+      { error: err.message || 'Internal Server Error' },
+      { status: 500 }
+    );
   }
 }
