@@ -3,11 +3,9 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useSupabaseClient, useSession } from '@supabase/auth-helpers-react';
 
 export default function SignInPage() {
   const [email, setEmail] = useState('');
-  const supabase = useSupabaseClient();
   const session = useSession();
   const router = useRouter();
 
