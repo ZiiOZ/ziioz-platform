@@ -7,31 +7,27 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 });
 
 export async function POST(req: NextRequest) {
-  const supabase = createServerSupabaseClient(); // ✅ build-safe
-
   try {
-    const { accountId, amount } = await req.json();
+    const { email } = await req.json();
 
-    if (!accountId || !amount) {
-      return NextResponse.json({ error: 'Missing accountId or amount' }, { status: 400 });
+    if (!email) {
+      return NextResponse.json({ error: 'Missing email' }, { status: 400 });
     }
 
-    const payout = await stripe.payouts.create(
-      {
-        amount: Math.round(amount),
-        currency: 'usd',
+    const supabase = createServerSupabaseClient(); // ✅ fixed safe usage
+
+    const account = await stripe.accounts.create({
+      type: 'standard',
+      email,
+      capabilities: {
+        card_payments: { requested: true },
+        transfers: { requested: true },
       },
-      {
-        stripeAccount: accountId,
-      }
-    );
+    });
 
-    // optional: log to Supabase or verify account ownership
-    // await supabase.from('payout_logs').insert(...);
-
-    return NextResponse.json({ success: true, payout }, { status: 200 });
+    return NextResponse.json({ success: true, accountId: account.id }, { status: 200 });
   } catch (err: any) {
-    console.error('Payout error:', err.message);
+    console.error('Onboard error:', err.message || err);
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
