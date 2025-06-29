@@ -7,15 +7,15 @@ export const config = {
   },
 };
 
+// ✅ Initialize Stripe with the correct API version
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2025-05-28.basil",
 });
 
-
 export async function POST(req: NextRequest) {
   const sig = req.headers.get("stripe-signature") as string;
 
-  // Raw body
+  // Read the raw request body
   const rawBody = await req.text();
 
   let event: Stripe.Event;
@@ -26,13 +26,13 @@ export async function POST(req: NextRequest) {
       process.env.STRIPE_WEBHOOK_SECRET!
     );
   } catch (err: any) {
-    console.error("Webhook signature error:", err.message);
+    console.error("❌ Webhook signature error:", err.message);
     return new Response(`Webhook Error: ${err.message}`, { status: 400 });
   }
 
-  console.log("✅ Event received:", event.type);
+  console.log("✅ Stripe Event received:", event.type);
 
-  // Example: log payout or payment intent
+  // Handle payment_intent.succeeded event
   if (event.type === "payment_intent.succeeded") {
     const paymentIntent = event.data.object as Stripe.PaymentIntent;
     console.log(`💰 PaymentIntent succeeded: ${paymentIntent.id}`);
