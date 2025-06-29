@@ -1,22 +1,28 @@
-import { createClient } from '@supabase/supabase-js';
+import { NextResponse } from "next/server";
+import { createClient } from "@supabase/supabase-js";
 
 const supabase = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_KEY!
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_KEY!
 );
 
-export default async function handler(req, res) {
-  const { user_id } = req.query;
+// This GET endpoint fetches payout records for a given user_id
+export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url);
+  const user_id = searchParams.get("user_id");
 
-  const { data, error } = await supabase
-    .from('profiles')
-    .select('stripe_payouts_enabled, stripe_details_submitted')
-    .eq('id', user_id)
-    .single();
-
-  if (error) {
-    return res.status(500).json({ error: error.message });
+  if (!user_id) {
+    return NextResponse.json({ error: "Missing user_id parameter" }, { status: 400 });
   }
 
-  res.status(200).json(data);
+  const { data, error } = await supabase
+    .from("payouts")   // <<-- This is your correct table name
+    .select("*")
+    .eq("user_id", user_id);
+
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+
+  return NextResponse.json(data);
 }
