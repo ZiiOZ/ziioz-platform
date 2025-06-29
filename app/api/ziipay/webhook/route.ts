@@ -6,17 +6,15 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2025-05-28.basil",
 });
 
-
-// Initialize Supabase
+// Initialize Supabase with SERVER keys
 const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_KEY!
+  process.env.SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_KEY!
 );
 
 export async function POST(req: Request) {
   const sig = req.headers.get("stripe-signature") as string;
 
-  // Get raw body as Buffer
   const rawBody = await req.arrayBuffer();
   const bodyBuffer = Buffer.from(rawBody);
 
@@ -33,7 +31,6 @@ export async function POST(req: Request) {
     return new NextResponse(`Webhook Error: ${err.message}`, { status: 400 });
   }
 
-  // ✅ Example: Handle a payout.paid event
   if (event.type === "payout.paid") {
     const payout = event.data.object as Stripe.Payout;
     const { id, amount, currency, arrival_date, status } = payout;
