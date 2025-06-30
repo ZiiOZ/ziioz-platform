@@ -15,29 +15,27 @@ export async function POST(req: NextRequest) {
   console.log("Webhook received");
 
   const sig = req.headers.get("stripe-signature") as string;
-  const body = await req.text();
+
+  const rawBody = await req.text();
 
   let event;
 
   try {
     event = stripe.webhooks.constructEvent(
-      body,
+      rawBody,
       sig,
       process.env.STRIPE_WEBHOOK_SECRET!
     );
   } catch (err: any) {
     console.error(`Webhook Error: ${err.message}`);
-    return NextResponse.json(
-      { error: `Webhook Error: ${err.message}` },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: `Webhook Error: ${err.message}` }, { status: 400 });
   }
 
   // Handle the event
   switch (event.type) {
     case "payment_intent.succeeded":
       const paymentIntent = event.data.object;
-      console.log("✅ PaymentIntent was successful!", paymentIntent.id);
+      console.log("PaymentIntent was successful!", paymentIntent.id);
       break;
     default:
       console.log(`Unhandled event type ${event.type}`);
