@@ -1,75 +1,56 @@
-import { NextRequest, NextResponse } from 'next/server';
-import Stripe from 'stripe';
-import { createClient } from '@supabase/supabase-js';
+import { NextRequest, NextResponse } from "next/server";
+import Stripe from "stripe";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+export const config = {
+  api: {
+    bodyParser: false, // Required for Stripe signature verification
+  },
+};
 
-
-// Initialize Supabase
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_KEY!
-);
+// Initialize Stripe client
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  apiVersion: "2023-10-16",
+});
 
 export async function POST(req: NextRequest) {
-  const sig = req.headers.get('stripe-signature')!;
-  const body = await req.text();
+  const sig = req.headers.get("stripe-signature") as string;
 
-  let event: Stripe.Event;
+  let event;
 
   try {
+    const body = await req.text();
+
     event = stripe.webhooks.constructEvent(
       body,
       sig,
       process.env.STRIPE_WEBHOOK_SECRET!
     );
-  } catch (err: any) {
-    console.error('Webhook signature verification failed.', err.message);
-    return NextResponse.json({ error: 'Invalid signature' }, { status: 400 });
-  }
 
-  // Handle the event types you care about
-  switch (event.type) {
-    case 'payout.paid': {
-      const payout = event.data.object as Stripe.Payout;
+    console.log("✅ Webhook verified:", event.id);
 
-      const { error } = await supabase.from('payouts').insert([
-        {
-          stripe_payout_id: payout.id,
-          amount: payout.amount / 100, // Convert cents to dollars
-          currency: payout.currency,
-          payout_date: new Date(payout.arrival_date * 1000).toISOString(),
-          status: 'paid',
-        },
-      ]);
-
-      if (error) {
-        console.error('Error inserting payout:', error);
-        return NextResponse.json({ error: error.message }, { status: 500 });
-      }
-
-      break;
+    // Handle the event
+    switch (event.type) {
+      case "payment_intent.succeeded":
+        const paymentIntent = event.data.object as Stripe.PaymentIntent;
+        console.log(`💰 PaymentIntent was successful: ${paymentIntent.id}`);
+        break;
+      case "payment_intent.payment_failed":
+        const failedIntent = event.data.object as Stripe.PaymentIntent;
+        console.log(`❌ Payment failed: ${failedIntent.id}`);
+        break;
+      case "charge.succeeded":
+        const charge = event.data.object as Stripe.Charge;
+        console.log(`✅ Charge succeeded: ${charge.id}`);
+        break;
+      default:
+        console.log(`Unhandled event type ${event.type}`);
     }
 
-    case 'payout.failed': {
-      const payout = event.data.object as Stripe.Payout;
-
-      const { error } = await supabase
-        .from('payouts')
-        .update({ status: 'failed' })
-        .eq('stripe_payout_id', payout.id);
-
-      if (error) {
-        console.error('Error updating payout status:', error);
-        return NextResponse.json({ error: error.message }, { status: 500 });
-      }
-
-      break;
-    }
-
-    default:
-      console.log(`Unhandled event type ${event.type}`);
+    return NextResponse.json({ received: true });
+  } catch (err) {
+    console.error("❌ Error verifying webhook:", err);
+    return new NextResponse(`Webhook Error: ${(err as Error).message}`, {
+      status: 400,
+    });
   }
-
-  return NextResponse.json({ received: true });
 }
