@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import Stripe from "stripe";
 
 export const config = {
@@ -11,31 +11,40 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2025-05-28.basil",
 });
 
-export async function POST(req: NextRequest) {
-  console.log("Webhook received");
+export async function POST(req: Request) {
+  const sig = req.headers.get("stripe-signature");
 
-  const sig = req.headers.get("stripe-signature") as string;
+  if (!sig) {
+    console.error("Missing Stripe signature header");
+    return NextResponse.json(
+      { error: "Missing Stripe signature header" },
+      { status: 400 }
+    );
+  }
 
-  const rawBody = await req.text();
+  const body = await req.text();
 
   let event;
 
   try {
     event = stripe.webhooks.constructEvent(
-      rawBody,
+      body,
       sig,
       process.env.STRIPE_WEBHOOK_SECRET!
     );
   } catch (err: any) {
     console.error(`Webhook Error: ${err.message}`);
-    return NextResponse.json({ error: `Webhook Error: ${err.message}` }, { status: 400 });
+    return NextResponse.json(
+      { error: `Webhook Error: ${err.message}` },
+      { status: 400 }
+    );
   }
 
   // Handle the event
   switch (event.type) {
     case "payment_intent.succeeded":
-      const paymentIntent = event.data.object;
-      console.log("PaymentIntent was successful!", paymentIntent.id);
+      const paymentIntent = event.data.object as Stripe.PaymentIntent;
+      console.log("✅ PaymentIntent was successful!", paymentIntent.id);
       break;
     default:
       console.log(`Unhandled event type ${event.type}`);
