@@ -10,12 +10,9 @@ export default function ZiiPayOnboardButton() {
     try {
       const res = await fetch("/api/ziipay/onboard", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        }
       });
 
-      // Always parse as JSON safely
+      // Ensure we always have some object to read
       const data = await res.json().catch(() => ({}));
 
       if (!res.ok) {
