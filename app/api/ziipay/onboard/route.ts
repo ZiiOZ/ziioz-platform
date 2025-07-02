@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2023-10-16" as any,
+  apiVersion: "2023-10-16",
 });
 
 export async function POST() {
@@ -20,11 +20,12 @@ export async function POST() {
       type: "account_onboarding",
     });
 
+    // Return the URL
     return NextResponse.json({ url: accountLink.url });
   } catch (err: any) {
-    console.error("Error creating Stripe account:", err);
+    console.error("Error in onboarding API:", err);
     return NextResponse.json(
-      { error: err.message || "Unknown error" },
+      { error: err.message ?? "Unknown error" },
       { status: 500 }
     );
   }
