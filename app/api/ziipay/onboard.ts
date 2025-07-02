@@ -27,6 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
   } catch (err: any) {
     console.error("Onboarding error:", err);
+    // Always return JSON
     return res.status(500).json({ error: err.message || "Internal Server Error" });
   }
 }

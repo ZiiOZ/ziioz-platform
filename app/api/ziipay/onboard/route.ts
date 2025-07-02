@@ -7,27 +7,13 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 export async function POST() {
   try {
-    // No req.json() because no body is needed
-
-    // Create the account
     const account = await stripe.accounts.create({
       type: "standard",
     });
 
-    // Create the account link
-    const accountLink = await stripe.accountLinks.create({
-      account: account.id,
-      refresh_url: "https://ziioz.com/ziipay-onboard-retry",
-      return_url: "https://ziioz.com/ziipay-onboard-success",
-      type: "account_onboarding",
-    });
-
-    return NextResponse.json({
-      accountId: account.id,
-      url: accountLink.url,
-    });
+    return NextResponse.json({ url: account.url });
   } catch (err: any) {
-    console.error("Onboarding error:", err);
+    console.error("Error:", err);
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
