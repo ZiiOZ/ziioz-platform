@@ -1,19 +1,42 @@
-const handleOnboard = async () => {
-  setLoading(true);
-  const res = await fetch('/api/ziipay/onboard', { method: 'POST' });
+"use client";
 
-  if (!res.ok) {
-    setLoading(false);
-    alert("Error starting onboarding.");
-    return;
-  }
+import { useState } from "react";
 
-  const data = await res.json();
-  setLoading(false);
+export default function ZiiPayOnboardButton() {
+  const [loading, setLoading] = useState(false);
 
-  if (data.url) {
-    window.location.href = data.url;
-  } else {
-    alert("Error starting onboarding.");
-  }
-};
+  const handleOnboard = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/ziipay/onboard", { method: "POST" });
+
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(`Server error ${res.status}: ${text}`);
+      }
+
+      const data = await res.json();
+
+      if (data?.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error("No URL returned from server.");
+      }
+    } catch (err: any) {
+      console.error("Onboarding error:", err);
+      alert("Error starting onboarding:\n" + (err.message || err));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <button
+      onClick={handleOnboard}
+      disabled={loading}
+      className="bg-black text-white px-4 py-2 rounded"
+    >
+      {loading ? "Redirecting..." : "Set Up Payouts"}
+    </button>
+  );
+}
