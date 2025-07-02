@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2025-05-28.basil",
+  apiVersion: "2023-10-16",
 });
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -17,11 +17,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       type: "standard",
     });
 
-    // Create an onboarding link
+    // Create an account onboarding link
     const accountLink = await stripe.accountLinks.create({
       account: account.id,
-      refresh_url: "https://ziioz-platform-v4-o26smqu4v-wes-projects-a1c0ced8.vercel.app/ziipay",
-      return_url: "https://ziioz-platform-v4-o26smqu4v-wes-projects-a1c0ced8.vercel.app/ziipay",
+      refresh_url: "https://ziioz.com/ziipay-onboard-retry",
+      return_url: "https://ziioz.com/ziipay-onboard-success",
       type: "account_onboarding",
     });
 
