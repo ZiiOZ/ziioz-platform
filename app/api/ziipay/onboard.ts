@@ -5,7 +5,6 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2025-05-28.basil",
 });
 
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
@@ -21,8 +20,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // Create an onboarding link
     const accountLink = await stripe.accountLinks.create({
       account: account.id,
-      refresh_url: "https://yourplatform.com/ziipay-onboard-retry",
-      return_url: "https://yourplatform.com/ziipay-onboard-success",
+      refresh_url: "https://ziioz-platform-v4-o26smqu4v-wes-projects-a1c0ced8.vercel.app/ziipay",
+      return_url: "https://ziioz-platform-v4-o26smqu4v-wes-projects-a1c0ced8.vercel.app/ziipay",
       type: "account_onboarding",
     });
 
