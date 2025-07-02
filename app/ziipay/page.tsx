@@ -1,5 +1,6 @@
-import ZiiPayOnboardButton from "@/app/components/ziipay/ZiiPayOnboardButton";
-import ZiiPayPaymentButton from "@/app/components/ziipay/ZiiPayPaymentButton";
+import ZiiPayOnboardButton from "@/components/ziipay/ZiiPayOnboardButton";
+import ZiiPayPaymentButton from "@/components/ziipay/ZiiPayPaymentButton";
+
 
 export default function ZiiPayPage() {
   return (
