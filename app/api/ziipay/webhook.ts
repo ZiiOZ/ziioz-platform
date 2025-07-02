@@ -1,15 +1,14 @@
 import { buffer } from "micro";
 import Stripe from "stripe";
-import { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiRequest, NextApiResponse } from "next";
 
 export const config = {
   api: { bodyParser: false },
+};
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2025-05-28.basil",
 });
-
- 
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
@@ -18,29 +17,33 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   const sig = req.headers["stripe-signature"];
-  const buf = await buffer(req);
+  if (!sig) {
+    return res.status(400).send("Missing Stripe signature");
+  }
 
   let event: Stripe.Event;
 
   try {
+    const buf = await buffer(req);
     event = stripe.webhooks.constructEvent(
       buf,
-      sig!,
+      sig,
       process.env.STRIPE_WEBHOOK_SECRET!
     );
   } catch (err: any) {
-    console.error("Webhook verification failed:", err.message);
+    console.error("Webhook signature verification failed.", err.message);
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
+  // Handle event types
   switch (event.type) {
     case "payment_intent.succeeded":
-      const pi = event.data.object as Stripe.PaymentIntent;
-      console.log(`✅ PaymentIntent succeeded: ${pi.id}`);
-      console.log(`Transferred to: ${pi.transfer_data?.destination}`);
+      const paymentIntent = event.data.object as Stripe.PaymentIntent;
+      console.log(`✅ PaymentIntent succeeded: ${paymentIntent.id}`);
       break;
-    case "v2.core.event_destination.ping":
-      console.log("✅ Received webhook ping");
+    case "account.updated":
+      const account = event.data.object as Stripe.Account;
+      console.log(`✅ Account updated: ${account.id}`);
       break;
     default:
       console.log(`Unhandled event type: ${event.type}`);
