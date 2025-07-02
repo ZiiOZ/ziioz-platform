@@ -1,14 +1,18 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  apiVersion: "2023-10-16",
+});
 
 export async function POST() {
   try {
+    // Create a connected account
     const account = await stripe.accounts.create({
       type: "standard",
     });
 
+    // Create an onboarding link
     const accountLink = await stripe.accountLinks.create({
       account: account.id,
       refresh_url: "https://ziioz.com/reauth",
@@ -18,9 +22,9 @@ export async function POST() {
 
     return NextResponse.json({ url: accountLink.url });
   } catch (err: any) {
-    console.error("Error in onboarding API:", err);
+    console.error("Error during onboarding:", err);
     return NextResponse.json(
-      { error: err.message ?? "Unknown error" },
+      { error: err.message || "Unknown error" },
       { status: 500 }
     );
   }
