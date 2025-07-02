@@ -26,7 +26,7 @@ export default function ZiiPayPaymentButton({
     const stripe = await stripePromise;
     const { error } = await stripe!.confirmCardPayment(clientSecret, {
       payment_method: {
-        card: { token: 'tok_visa' }, // For test mode only
+        card: { token: 'tok_visa' },
       },
     });
 
