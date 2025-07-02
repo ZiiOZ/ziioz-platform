@@ -8,14 +8,15 @@ export default function ZiiPayOnboardButton() {
   const handleOnboard = async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/ziipay/onboard", { method: "POST" });
+      const res = await fetch("/api/ziipay/onboard", {
+        method: "POST",
+      });
 
-      // Safely try to parse JSON
-      let data: any = null;
-      try {
-        data = await res.json();
-      } catch {
-        throw new Error(`Server error ${res.status}: invalid JSON response`);
+      const text = await res.text();
+      let data: any = {};
+
+      if (text) {
+        data = JSON.parse(text);
       }
 
       if (!res.ok) {
@@ -41,7 +42,7 @@ export default function ZiiPayOnboardButton() {
       disabled={loading}
       className="bg-black text-white px-4 py-2 rounded"
     >
-      {loading ? "Processing..." : "Set Up Payouts"}
+      {loading ? "Redirecting..." : "Set Up Payouts"}
     </button>
   );
 }
