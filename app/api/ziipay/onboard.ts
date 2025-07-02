@@ -1,9 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import Stripe from "stripe";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2023-10-16",
-});
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
@@ -12,12 +10,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    // Create a new connected account
     const account = await stripe.accounts.create({
       type: "standard",
     });
 
-    // Create an account onboarding link
     const accountLink = await stripe.accountLinks.create({
       account: account.id,
       refresh_url: "https://ziioz.com/ziipay-onboard-retry",
