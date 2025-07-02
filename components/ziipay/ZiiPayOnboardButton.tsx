@@ -10,12 +10,19 @@ export default function ZiiPayOnboardButton() {
     try {
       const res = await fetch("/api/ziipay/onboard", { method: "POST" });
 
-      if (!res.ok) {
+      const contentType = res.headers.get("content-type");
+      let data: any = {};
+
+      if (contentType && contentType.includes("application/json")) {
+        data = await res.json();
+      } else {
         const text = await res.text();
-        throw new Error(`Server error ${res.status}: ${text}`);
+        throw new Error(`Unexpected response: ${text}`);
       }
 
-      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || `Server error ${res.status}`);
+      }
 
       if (data?.url) {
         window.location.href = data.url;

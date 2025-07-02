@@ -1,33 +1,28 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextResponse } from "next/server";
 import Stripe from "stripe";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  apiVersion: "2023-10-16" as any,
+});
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== "POST") {
-    res.setHeader("Allow", "POST");
-    return res.status(405).json({ error: "Method Not Allowed" });
-  }
-
+export async function POST() {
   try {
+    // Create the Stripe account
     const account = await stripe.accounts.create({
       type: "standard",
     });
 
+    // Create an account link for onboarding
     const accountLink = await stripe.accountLinks.create({
       account: account.id,
-      refresh_url: "https://ziioz.com/ziipay-onboard-retry",
-      return_url: "https://ziioz.com/ziipay-onboard-success",
+      refresh_url: "https://ziioz.com/ziipay", // change if needed
+      return_url: "https://ziioz.com/ziipay",
       type: "account_onboarding",
     });
 
-    return res.status(200).json({
-      accountId: account.id,
-      url: accountLink.url,
-    });
+    return NextResponse.json({ url: accountLink.url });
   } catch (err: any) {
-    console.error("Onboarding error:", err);
-    // Always return JSON
-    return res.status(500).json({ error: err.message || "Internal Server Error" });
+    console.error("Error:", err);
+    return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
