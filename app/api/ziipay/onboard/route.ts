@@ -7,7 +7,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 export async function POST() {
   try {
-    // No req.json() because no body needed
+    // No req.json() because no body is needed
 
     // Create the account
     const account = await stripe.accounts.create({
@@ -22,12 +22,12 @@ export async function POST() {
       type: "account_onboarding",
     });
 
-    return NextResponse.json({ url: accountLink.url });
+    return NextResponse.json({
+      accountId: account.id,
+      url: accountLink.url,
+    });
   } catch (err: any) {
-    console.error("Error:", err);
-    return NextResponse.json(
-      { error: err.message || "Internal Server Error" },
-      { status: 500 }
-    );
+    console.error("Onboarding error:", err);
+    return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
