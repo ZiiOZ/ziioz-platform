@@ -15,14 +15,17 @@ export async function POST() {
     // Create the onboarding link
     const accountLink = await stripe.accountLinks.create({
       account: account.id,
-      refresh_url: "https://ziioz.com/reauth",   // Replace with your refresh URL
-      return_url: "https://ziioz.com/complete", // Replace with your return URL
+      refresh_url: "https://ziioz.com/reauth",
+      return_url: "https://ziioz.com/complete",
       type: "account_onboarding",
     });
 
     return NextResponse.json({ url: accountLink.url });
   } catch (err: any) {
-    console.error("Error:", err);
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    console.error("Error creating Stripe account:", err);
+    return NextResponse.json(
+      { error: err.message || "Unknown error" },
+      { status: 500 }
+    );
   }
 }
