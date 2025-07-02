@@ -10,18 +10,15 @@ export default function ZiiPayOnboardButton() {
     try {
       const res = await fetch("/api/ziipay/onboard", { method: "POST" });
 
-      const contentType = res.headers.get("content-type");
       let data: any = {};
-
-      if (contentType && contentType.includes("application/json")) {
+      try {
         data = await res.json();
-      } else {
-        const text = await res.text();
-        throw new Error(`Unexpected response: ${text}`);
+      } catch {
+        console.error("Response was not valid JSON.");
       }
 
       if (!res.ok) {
-        throw new Error(data.error || `Server error ${res.status}`);
+        throw new Error(data?.error || `Server error ${res.status}`);
       }
 
       if (data?.url) {
@@ -31,7 +28,7 @@ export default function ZiiPayOnboardButton() {
       }
     } catch (err: any) {
       console.error("Onboarding error:", err);
-      alert("Error starting onboarding:\n" + (err.message || err));
+      alert("Error starting onboarding:\n" + (err?.message || "Unknown error"));
     } finally {
       setLoading(false);
     }
