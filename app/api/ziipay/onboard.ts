@@ -26,7 +26,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       url: accountLink.url,
     });
   } catch (err: any) {
-    console.error("Onboarding error:", err);
-    return res.status(500).json({ error: err.message });
+    console.error("Onboarding error FULL:", JSON.stringify(err, null, 2));
+    return res.status(500).json({
+      error: err?.message || "Unknown error",
+      raw: err,
+    });
   }
 }
