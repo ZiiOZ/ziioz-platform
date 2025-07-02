@@ -10,7 +10,7 @@ export async function POST() {
       type: "standard",
     });
 
-    // Create the onboarding link
+    // Create an onboarding link
     const accountLink = await stripe.accountLinks.create({
       account: account.id,
       refresh_url: "https://ziioz.com/reauth",
