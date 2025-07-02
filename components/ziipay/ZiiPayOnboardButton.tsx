@@ -10,11 +10,12 @@ export default function ZiiPayOnboardButton() {
     try {
       const res = await fetch("/api/ziipay/onboard", { method: "POST" });
 
-      let data: any = {};
+      // Safely try to parse JSON
+      let data: any = null;
       try {
         data = await res.json();
       } catch {
-        console.error("Response was not valid JSON.");
+        throw new Error(`Server error ${res.status}: invalid JSON response`);
       }
 
       if (!res.ok) {
@@ -40,7 +41,7 @@ export default function ZiiPayOnboardButton() {
       disabled={loading}
       className="bg-black text-white px-4 py-2 rounded"
     >
-      {loading ? "Redirecting..." : "Set Up Payouts"}
+      {loading ? "Processing..." : "Set Up Payouts"}
     </button>
   );
 }
