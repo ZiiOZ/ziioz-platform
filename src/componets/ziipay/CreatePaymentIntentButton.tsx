@@ -1,50 +1,73 @@
-import React from "react";
-import { loadStripe } from "@stripe/stripe-js";
+"use client";
 
-const stripePromise = loadStripe("pk_test_xxxxxxxxxxxxxxxxxxxxxxxxxx"); // Replace with your Stripe Publishable Key
+import { useEffect, useState } from "react";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
+
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
 export default function CreatePaymentIntentButton() {
+  return (
+    <Elements stripe={stripePromise}>
+      <PaymentForm />
+    </Elements>
+  );
+}
+
+function PaymentForm() {
+  const stripe = useStripe();
+  const elements = useElements();
+  const [loading, setLoading] = useState(false);
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
+
+  const createPaymentIntent = async () => {
+    setLoading(true);
+    const res = await fetch("/api/create-payment-intent", { method: "POST" });
+    const data = await res.json();
+    setClientSecret(data.clientSecret);
+    setLoading(false);
+  };
+
   const handlePayment = async () => {
-    try {
-      const response = await fetch("https://ziioz-stripe-server.onrender.com/create-payment-intent", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      const data = await response.json();
-
-      const stripe = await stripePromise;
-      if (!stripe) throw new Error("Stripe.js failed to load");
-
-      const { error } = await stripe.confirmCardPayment(data.clientSecret, {
-        payment_method: {
-          card: {
-            // This assumes you have a CardElement mounted somewhere
-            // Or you can create a PaymentElement instead
-          },
-        },
-      });
-
-      if (error) {
-        console.error("Payment failed:", error);
-        alert(`Payment failed: ${error.message}`);
-      } else {
-        alert("Payment succeeded!");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      alert("Error processing payment. See console for details.");
+    if (!stripe || !elements || !clientSecret) return;
+    setLoading(true);
+    const result = await stripe.confirmCardPayment(clientSecret, {
+      payment_method: {
+        card: elements.getElement(CardElement)!,
+      },
+    });
+    if (result.error) {
+      setMessage(result.error.message || "Payment failed");
+    } else {
+      setMessage("✅ Payment succeeded!");
     }
+    setLoading(false);
   };
 
   return (
-    <button
-      onClick={handlePayment}
-      className="bg-green-600 text-white px-4 py-2 rounded"
-    >
-      Create Payment Intent
-    </button>
+    <div className="p-4 border rounded shadow max-w-md mx-auto mt-4">
+      {!clientSecret ? (
+        <button
+          onClick={createPaymentIntent}
+          className="px-4 py-2 bg-blue-600 text-white rounded"
+          disabled={loading}
+        >
+          {loading ? "Creating..." : "Create Payment Intent"}
+        </button>
+      ) : (
+        <>
+          <CardElement className="border p-2 my-4" />
+          <button
+            onClick={handlePayment}
+            className="px-4 py-2 bg-green-600 text-white rounded"
+            disabled={loading}
+          >
+            {loading ? "Processing..." : "Pay"}
+          </button>
+        </>
+      )}
+      {message && <p className="mt-2">{message}</p>}
+    </div>
   );
 }
