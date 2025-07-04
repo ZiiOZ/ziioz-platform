@@ -1,7 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   eslint: {
-    ignoreDuringBuilds: true, // ✅ Ignore linting during build — permanent fix
+    ignoreDuringBuilds: true, // ✅ Ignore linting during build
+  },
+  async redirects() {
+    return [];
   },
 };
 
