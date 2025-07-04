@@ -2,10 +2,8 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import Stripe from "stripe";
 import { buffer } from "micro";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2025-05-28.basil",
-});
-
+// IMPORTANT: No apiVersion here, it uses environment default
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export const config = {
   api: {
@@ -20,7 +18,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   const sig = req.headers["stripe-signature"] as string;
-
   let event: Stripe.Event;
 
   try {
@@ -32,19 +29,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     );
   } catch (err) {
     console.error("Webhook signature error:", err);
-    return res.status(400).send(
-      `Webhook Error: ${err instanceof Error ? err.message : "Unknown error"}`
-    );
+    return res
+      .status(400)
+      .send(`Webhook Error: ${err instanceof Error ? err.message : "Unknown error"}`);
   }
 
   switch (event.type) {
     case "payment_intent.succeeded":
       const paymentIntent = event.data.object as Stripe.PaymentIntent;
-      console.log("✅ PaymentIntent succeeded:", paymentIntent.id);
+      console.log("PaymentIntent succeeded:", paymentIntent.id);
       break;
     case "account.updated":
       const account = event.data.object as Stripe.Account;
-      console.log("✅ Account updated:", account.id);
+      console.log("Account updated:", account.id);
       break;
     default:
       console.log(`Unhandled event type ${event.type}`);
