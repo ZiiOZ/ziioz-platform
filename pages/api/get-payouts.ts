@@ -1,21 +1,24 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiRequest, NextApiResponse } from "next";
 import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
+    // Get current balance
     const balance = await stripe.balance.retrieve();
-    const payouts = await stripe.payouts.list({ limit: 5 });
+
+    // Get payout history (last 30)
+    const payouts = await stripe.payouts.list({
+      limit: 30,
+    });
+
     res.status(200).json({
-      balance: {
-        available: balance.available[0]?.amount || 0,
-        pending: balance.pending[0]?.amount || 0,
-      },
+      balance,
       payouts: payouts.data,
     });
   } catch (error: any) {
-    console.error(error);
+    console.error("Stripe Payout Fetch Error:", error);
     res.status(500).json({ error: error.message });
   }
 }
