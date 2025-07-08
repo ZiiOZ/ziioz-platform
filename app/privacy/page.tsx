@@ -1,34 +1,38 @@
 export default function PrivacyPolicy() {
   return (
-    <main style={{ padding: "2rem", fontFamily: "sans-serif" }}>
+    <main style={{ padding: "2rem" }}>
       <h1>Privacy Policy</h1>
       <p>
-        This Privacy Policy describes how ZiiOZ ("we", "our", or "us") collects, uses, and protects your personal information when you use the ZiiOZ platform.
+        This Privacy Policy explains how ZiiOZ collects, uses, and protects your information.
       </p>
+
       <h2>Information We Collect</h2>
       <p>
-        We may collect information you provide when you register, create content, interact with others, or use any features of the service. This includes your name, email, content you upload, and payment data processed via Stripe.
+        We may collect information you provide when you create an account, use the platform, or contact support.
       </p>
-      <h2>How We Use Your Information</h2>
+
+      <h2>Use of Information</h2>
       <p>
-        We use your information to operate and improve ZiiOZ, process transactions, provide support, communicate with you, and comply with legal obligations.
+        Your information helps us operate, improve, and personalize the ZiiOZ experience.
       </p>
-      <h2>Sharing Your Information</h2>
+
+      <h2>Sharing of Information</h2>
       <p>
-        We do not sell your personal information. We may share information with service providers (e.g., Stripe) and as required by law.
+        We do not sell your information. We may share data with service providers (e.g., payment processors) to operate the platform.
       </p>
-      <h2>Data Security</h2>
+
+      <h2>Security</h2>
       <p>
-        We use industry-standard measures to protect your data. However, no system can be guaranteed 100% secure.
+        We use reasonable measures to protect your data but cannot guarantee absolute security.
       </p>
-      <h2>Your Rights</h2>
+
+      <h2>Contact & Support</h2>
       <p>
-        You can access, update, or delete your information by contacting us at support@ziioz.com.
+        All support inquiries are managed by our AI Support Assistant.<br />
+        Please email <strong>support@ziioz.com</strong> to open a support request.<br />
+        If your issue requires additional assistance, a human team member will follow up.
       </p>
-      <h2>Contact Us</h2>
-      <p>
-        If you have questions about this policy, email us at support@ziioz.com.
-      </p>
+
       <p>Last updated: July 2025</p>
     </main>
   );
