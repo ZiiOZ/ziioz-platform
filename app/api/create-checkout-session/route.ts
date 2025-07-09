@@ -15,7 +15,7 @@ export async function POST(req: Request) {
             product_data: {
               name: "Test Product",
             },
-            unit_amount: 500,
+            unit_amount: 150,
           },
           quantity: 1,
         },
