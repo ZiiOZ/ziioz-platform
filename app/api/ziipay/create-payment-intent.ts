@@ -1,34 +1,39 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import Stripe from "stripe";
 
-// ✅ No apiVersion specified, uses default from Stripe Dashboard
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  apiVersion: "2023-10-16",
+});
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
     return res.status(405).end("Method Not Allowed");
   }
 
   try {
-    const { amount, connectedAccountId } = req.body;
+    const { amount } = req.body;
 
-    if (!amount || !connectedAccountId) {
-      return res.status(400).json({ error: "Missing amount or connectedAccountId" });
+    if (!amount) {
+      return res.status(400).json({ error: "Missing amount" });
     }
 
     const paymentIntent = await stripe.paymentIntents.create({
-      amount, // e.g. 2000 = $20.00
+      amount,
       currency: "usd",
       payment_method_types: ["card"],
       transfer_data: {
-        destination: connectedAccountId,
+        destination: "acct_1Ris1w2Y0VQACAr8", // ✅ your connected account
       },
-      // Optional platform fee
-      application_fee_amount: 100, // e.g. $1.00 fee
+      application_fee_amount: 100, // platform fee
     });
 
-    return res.status(200).json({ clientSecret: paymentIntent.client_secret });
+    return res.status(200).json({
+      clientSecret: paymentIntent.client_secret,
+    });
   } catch (err: any) {
     console.error("PaymentIntent error:", err);
     return res.status(500).json({ error: err.message });
