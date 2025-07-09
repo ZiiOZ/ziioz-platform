@@ -1,9 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import Stripe from "stripe";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2025-05-28.basil",
-});
+// ✅ No apiVersion specified, uses default from Stripe Dashboard
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
@@ -19,13 +18,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: amount, // e.g. 2000 = $20.00
+      amount, // e.g. 2000 = $20.00
       currency: "usd",
       payment_method_types: ["card"],
       transfer_data: {
         destination: connectedAccountId,
       },
-      // Optional: take a platform fee
+      // Optional platform fee
       application_fee_amount: 100, // e.g. $1.00 fee
     });
 
