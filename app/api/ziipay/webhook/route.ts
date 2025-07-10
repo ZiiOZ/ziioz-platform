@@ -2,13 +2,6 @@
 import Stripe from "stripe";
 import { NextRequest, NextResponse } from "next/server";
 
-// This disables the automatic body parsing
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
-
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2025-06-30.basil",
 });
@@ -23,7 +16,7 @@ export async function POST(req: NextRequest) {
   try {
     event = stripe.webhooks.constructEvent(buf, sig, process.env.STRIPE_WEBHOOK_SECRET!);
   } catch (err: any) {
-    console.error("Webhook signature verification failed:", err);
+    console.error("❌ Webhook signature verification failed:", err);
     return new NextResponse(`Webhook Error: ${err.message}`, { status: 400 });
   }
 
