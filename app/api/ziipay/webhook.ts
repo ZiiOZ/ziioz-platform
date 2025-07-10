@@ -1,10 +1,10 @@
 import { buffer } from "micro";
+import type { NextApiRequest, NextApiResponse } from "next";
 import Stripe from "stripe";
-import { NextApiRequest, NextApiResponse } from "next";
 
 export const config = {
   api: {
-    bodyParser: false, // IMPORTANT: disables Next.js body parsing
+    bodyParser: false,
   },
 };
 
@@ -18,31 +18,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(405).end("Method Not Allowed");
   }
 
+  const buf = await buffer(req);
   const sig = req.headers["stripe-signature"] as string;
 
   let event;
 
   try {
-    const buf = await buffer(req);
-
-    event = stripe.webhooks.constructEvent(
-      buf,
-      sig,
-      process.env.STRIPE_WEBHOOK_SECRET!
-    );
+    event = stripe.webhooks.constructEvent(buf, sig, process.env.STRIPE_WEBHOOK_SECRET!);
   } catch (err: any) {
-    console.error("❌ Webhook signature verification failed:", err);
+    console.error("Webhook Error:", err.message);
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
-  // ✅ Handle the event
   switch (event.type) {
     case "payment_intent.succeeded":
       const paymentIntent = event.data.object;
       console.log("✅ PaymentIntent was successful:", paymentIntent.id);
       break;
     default:
-      console.log(`ℹ️ Unhandled event type: ${event.type}`);
+      console.log(`Unhandled event type: ${event.type}`);
   }
 
   res.json({ received: true });
