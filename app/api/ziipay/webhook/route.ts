@@ -1,18 +1,28 @@
+// app/api/ziipay/webhook/route.ts
 import Stripe from "stripe";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+  runtime: "nodejs", // THIS IS CRUCIAL - disables edge runtime
+};
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2025-06-30.basil",
 });
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   const sig = req.headers.get("stripe-signature")!;
-  const body = await req.text(); // IMPORTANT: use text() not arrayBuffer()
+  const rawBody = await req.arrayBuffer();
+  const buf = Buffer.from(rawBody);
 
   let event;
+
   try {
     event = stripe.webhooks.constructEvent(
-      body,
+      buf,
       sig,
       process.env.STRIPE_WEBHOOK_SECRET!
     );
@@ -21,7 +31,6 @@ export async function POST(req: Request) {
     return new NextResponse(`Webhook Error: ${err.message}`, { status: 400 });
   }
 
-  // Process event
   switch (event.type) {
     case "payment_intent.succeeded":
       const paymentIntent = event.data.object;
