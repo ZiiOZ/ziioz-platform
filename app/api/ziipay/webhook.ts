@@ -2,7 +2,6 @@ import { buffer } from "micro";
 import { NextApiRequest, NextApiResponse } from "next";
 import Stripe from "stripe";
 
-// Disable body parsing so Stripe can verify the signature
 export const config = {
   api: {
     bodyParser: false,
