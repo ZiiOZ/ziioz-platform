@@ -1,7 +1,13 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { buffer } from "micro";
 import Stripe from "stripe";
+import { NextApiRequest, NextApiResponse } from "next";
 
-// ✅ No apiVersion specified
+export const config = {
+  api: {
+    bodyParser: false, // IMPORTANT: disables Next.js body parsing
+  },
+};
+
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2025-06-30.basil",
 });
@@ -17,13 +23,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   let event;
 
   try {
+    const buf = await buffer(req);
+
     event = stripe.webhooks.constructEvent(
-      req.body,
+      buf,
       sig,
       process.env.STRIPE_WEBHOOK_SECRET!
     );
   } catch (err: any) {
-    console.error("Webhook error:", err);
+    console.error("❌ Webhook signature verification failed:", err);
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
@@ -31,11 +39,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   switch (event.type) {
     case "payment_intent.succeeded":
       const paymentIntent = event.data.object;
-      console.log("PaymentIntent was successful:", paymentIntent.id);
+      console.log("✅ PaymentIntent was successful:", paymentIntent.id);
       break;
-    // Add more event types as needed
     default:
-      console.log(`Unhandled event type: ${event.type}`);
+      console.log(`ℹ️ Unhandled event type: ${event.type}`);
   }
 
   res.json({ received: true });
