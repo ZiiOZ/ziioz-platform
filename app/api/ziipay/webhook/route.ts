@@ -1,6 +1,5 @@
-// /pages/api/ziipay/webhook.ts
-import { buffer } from "micro";
-import { NextApiRequest, NextApiResponse } from "next";
+// /app/api/ziipay/webhook/route.ts
+import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 
 export const config = {
@@ -13,29 +12,24 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2025-06-30.basil",
 });
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== "POST") {
-    res.setHeader("Allow", "POST");
-    return res.status(405).end("Method Not Allowed");
-  }
+export async function POST(req: NextRequest) {
+  const sig = req.headers.get("stripe-signature") as string;
 
-  const sig = req.headers["stripe-signature"] as string;
+  const rawBody = await req.text();
 
   let event;
 
   try {
-    const buf = await buffer(req);
     event = stripe.webhooks.constructEvent(
-      buf,
+      Buffer.from(rawBody),
       sig,
       process.env.STRIPE_WEBHOOK_SECRET!
     );
   } catch (err: any) {
     console.error("Webhook signature verification failed:", err);
-    return res.status(400).send(`Webhook Error: ${err.message}`);
+    return new NextResponse(`Webhook Error: ${err.message}`, { status: 400 });
   }
 
-  // Handle the event
   switch (event.type) {
     case "payment_intent.succeeded":
       const paymentIntent = event.data.object;
@@ -45,5 +39,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       console.log(`Unhandled event type: ${event.type}`);
   }
 
-  res.json({ received: true });
+  return NextResponse.json({ received: true });
 }
