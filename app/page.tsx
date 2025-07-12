@@ -5,7 +5,9 @@ export default function Home() {
         <img
           src="/ziioz-logo.png"
           alt="ZiiOZ Logo"
-          className="mx-auto w-32"
+          className="mx-auto"
+          width={128}
+          height={128}
         />
         <h1 className="text-3xl font-bold text-gray-900">ZiiOZ Home</h1>
         <p className="text-gray-700">Welcome to the platform.</p>
