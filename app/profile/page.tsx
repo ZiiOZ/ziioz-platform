@@ -1,46 +1,45 @@
 "use client";
+
 import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 export default function ProfilePage() {
-  const supabase = createClientComponentClient();
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-    });
-
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-    });
-
-    return () => {
-      listener?.subscription.unsubscribe();
+    const fetchUser = async () => {
+      const { data, error } = await supabase.auth.getUser();
+      if (error || !data.user) {
+        router.push("/login");
+      } else {
+        setUser(data.user);
+      }
     };
-  }, []);
+    fetchUser();
+  }, [router]);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    router.push("/login");
+    router.push("/");
   };
 
-  if (!user) {
-    return (
-      <main className="p-8">
-        <p>You are not logged in.</p>
-        <a href="/login">Login</a>
-      </main>
-    );
-  }
+  if (!user) return null;
 
   return (
-    <main className="p-8">
-      <h1 className="text-2xl font-bold">Profile</h1>
-      <p>Email: {user.email}</p>
-      <button onClick={handleLogout} className="bg-red-500 text-white px-4 py-2 mt-4">Logout</button>
+    <main className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+      <div className="bg-white dark:bg-gray-800 p-8 rounded shadow w-full max-w-md text-center">
+        <h1 className="text-2xl font-semibold mb-4 text-gray-900 dark:text-white">
+          Welcome, {user.email}
+        </h1>
+        <button
+          onClick={handleLogout}
+          className="bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 transition"
+        >
+          Logout
+        </button>
+      </div>
     </main>
   );
 }
