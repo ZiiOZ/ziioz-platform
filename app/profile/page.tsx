@@ -1,12 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
-export default function HomePage() {
+export default function ProfilePage() {
   const supabase = createClientComponentClient();
-  const [user, setUser] = useState<any>(null);
   const router = useRouter();
+  const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -27,20 +27,20 @@ export default function HomePage() {
     router.push("/login");
   };
 
+  if (!user) {
+    return (
+      <main className="p-8">
+        <p>You are not logged in.</p>
+        <a href="/login">Login</a>
+      </main>
+    );
+  }
+
   return (
     <main className="p-8">
-      <h1 className="text-2xl font-bold">ZiiOZ Home</h1>
-      {user ? (
-        <>
-          <p>Welcome, {user.email}</p>
-          <button onClick={handleLogout}>Logout</button>
-        </>
-      ) : (
-        <>
-          <p>You are not logged in.</p>
-          <a href="/login">Login</a> | <a href="/signup">Sign Up</a>
-        </>
-      )}
+      <h1 className="text-2xl font-bold">Profile</h1>
+      <p>Email: {user.email}</p>
+      <button onClick={handleLogout} className="bg-red-500 text-white px-4 py-2 mt-4">Logout</button>
     </main>
   );
 }
