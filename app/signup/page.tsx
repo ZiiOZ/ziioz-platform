@@ -1,17 +1,13 @@
-// pages/signup.tsx
+"use client";
 import { useState } from "react";
-import { useRouter } from "next/router";
-import { createClient } from "@supabase/supabase-js";
+import { useRouter } from "next/navigation";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
-
-export default function Signup() {
+export default function SignupPage() {
+  const supabase = createClientComponentClient();
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const router = useRouter();
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,28 +20,28 @@ export default function Signup() {
   };
 
   return (
-    <div style={{ padding: "2rem" }}>
-      <h1>Sign Up</h1>
+    <main className="p-8">
+      <h1 className="text-2xl font-bold">Sign Up</h1>
       <form onSubmit={handleSignup}>
         <input
           type="email"
           placeholder="Email"
+          className="border p-2 mb-2 w-full"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          required
         /><br/>
         <input
           type="password"
           placeholder="Password"
+          className="border p-2 mb-2 w-full"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          required
         /><br/>
-        <button type="submit">Sign Up</button>
+        <button type="submit" className="bg-green-500 text-white px-4 py-2">Sign Up</button>
       </form>
-      <p>
-        Already have an account? <a href="/login">Login</a>
+      <p className="mt-2">
+        Already have an account? <a href="/login" className="text-blue-500">Login</a>
       </p>
-    </div>
+    </main>
   );
 }
