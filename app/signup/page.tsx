@@ -2,6 +2,11 @@ export default function SignupPage() {
   return (
     <main className="min-h-screen flex items-center justify-center bg-white">
       <div className="w-full max-w-sm space-y-6 text-center">
+        <img
+          src="/ziioz-logo.png"
+          alt="ZiiOZ Logo"
+          className="mx-auto w-20"
+        />
         <h1 className="text-3xl font-bold text-gray-900">Sign Up for ZiiOZ</h1>
         <form className="space-y-4">
           <input
