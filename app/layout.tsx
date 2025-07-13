@@ -1,4 +1,3 @@
-// app/layout.tsx
 import "./globals.css";
 import { ReactNode } from "react";
 
@@ -14,7 +13,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <header className="p-4 border-b border-gray-200">
           <div className="container mx-auto flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <img src="/logo.png" alt="ZiiOZ Logo" className="h-8 w-8" />
+              <img src="/ziioz-logo.png" alt="ZiiOZ Logo" className="h-8 w-8" />
               <span className="font-semibold text-xl">ZiiOZ</span>
             </div>
           </div>
