@@ -1,38 +1,39 @@
-// app/login/page.tsx
 "use client";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
+import { useRouter } from "next/navigation";
 
-export default function Login() {
-  const router = useRouter();
+export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
+    setError(null);
+
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
+
     if (error) {
-      alert(error.message);
+      setError(error.message);
     } else {
       router.push("/profile");
     }
+
+    setLoading(false);
   };
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-white">
-      <div className="w-full max-w-md space-y-6 p-6 border rounded shadow-sm">
-        <div className="text-center space-y-2">
-          <img
-            src="/ziioz-logo.png"
-            alt="ZiiOZ Logo"
-            className="w-16 mx-auto"
-          />
-          <h1 className="text-2xl font-bold">Login to ZiiOZ</h1>
-        </div>
+      <div className="w-full max-w-sm space-y-6 text-center">
+        <img src="/ziioz-logo.png" alt="ZiiOZ Logo" className="mx-auto w-20" />
+        <h1 className="text-3xl font-bold text-gray-900">Login to ZiiOZ</h1>
         <form onSubmit={handleLogin} className="space-y-4">
           <input
             type="email"
@@ -40,7 +41,7 @@ export default function Login() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="w-full border px-4 py-2 rounded"
+            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <input
             type="password"
@@ -48,16 +49,18 @@ export default function Login() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            className="w-full border px-4 py-2 rounded"
+            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <button
             type="submit"
-            className="w-full bg-black text-white py-2 rounded hover:bg-gray-800"
+            disabled={loading}
+            className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
           >
-            Login
+            {loading ? "Logging In..." : "Login"}
           </button>
+          {error && <p className="text-red-600">{error}</p>}
         </form>
-        <p className="text-center text-sm">
+        <p className="text-sm text-gray-700">
           No account?{" "}
           <a href="/signup" className="text-blue-600 hover:underline">
             Sign up here
