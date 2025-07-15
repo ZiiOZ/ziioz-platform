@@ -1,22 +1,17 @@
-import postmark from "postmark";
+import { ServerClient } from "postmark";
 
-export async function sendBasicEmail(
-  to: string,
-  subject: string,
-  body: string
-) {
-  console.log("Loaded Postmark token:", process.env.POSTMARK_SERVER_API_TOKEN);
+const client = new ServerClient(process.env.POSTMARK_SERVER_API_TOKEN!);
 
-  const client = new postmark.ServerClient(process.env.POSTMARK_SERVER_API_TOKEN as string);
-
-  const result = await client.sendEmail({
-    From: "support@ziioz.com",
-    To: to,
-    Subject: subject,
-    TextBody: body,
+export async function sendWelcomeEmail(toEmail: string) {
+  await client.sendEmail({
+    From: "noreply@ziioz.com",
+    To: toEmail,
+    Subject: "Welcome to ZiiOZ",
+    HtmlBody: `
+      <h1>Welcome to ZiiOZ 🎉</h1>
+      <p>Thanks for joining our platform. We're excited to have you!</p>
+    `,
+    TextBody: "Welcome to ZiiOZ! Thanks for joining our platform.",
+    MessageStream: "outbound" // this is the default transactional stream
   });
-
-  console.log("Postmark send result:", result);
-
-  return result;
 }
