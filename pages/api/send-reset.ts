@@ -1,19 +1,26 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { sendBasicEmail } from "@/utils/sendEmail";
+import { sendWelcomeEmail } from "@/src/utils/sendEmail";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { email, resetUrl } = req.body;
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  if (req.method !== "POST") {
+    return res.status(405).json({ message: "Method not allowed" });
+  }
+
+  const { email } = req.body;
+
+  if (!email) {
+    return res.status(400).json({ message: "Missing email" });
+  }
 
   try {
-    await sendBasicEmail(
-      email,
-      "Reset your ZiiOZ password",
-      `Click here to reset your password: ${resetUrl}`
-    );
+    await sendWelcomeEmail(email);
 
     res.status(200).json({ success: true });
   } catch (error) {
-    console.error("Email send error:", error);
-    res.status(500).json({ success: false });
+    console.error("Error sending email:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 }

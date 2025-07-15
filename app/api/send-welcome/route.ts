@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { sendBasicEmail } from "../../../src/utils/sendEmail";
+import { sendWelcomeEmail } from "@/src/utils/sendEmail";
 
 export async function POST(req: NextRequest) {
   try {
@@ -12,15 +12,11 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    await sendBasicEmail(
-      email,
-      "Welcome to ZiiOZ",
-      "Hi there! Thanks for joining ZiiOZ. We're excited to have you."
-    );
+    await sendWelcomeEmail(email);
 
-    return NextResponse.json({ success: true }); // ✅ This line is REQUIRED
+    return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Error sending email:", error);
+    console.error("Error sending welcome email:", error);
     return NextResponse.json(
       { success: false, message: "Internal server error" },
       { status: 500 }
