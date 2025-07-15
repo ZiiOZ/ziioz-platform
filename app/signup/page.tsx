@@ -23,6 +23,15 @@ export default function SignupPage() {
     if (error) {
       setError(error.message);
     } else {
+      // ✅ Send Welcome Email AFTER successful signup
+      await fetch("/api/send-welcome", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+        }),
+      });
+
       router.push("/login");
     }
 

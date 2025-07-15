@@ -23,9 +23,7 @@
       }
     ],
     "paths": {
-      "@/*": [
-        "./*"
-      ]
+      "@/*": ["./src/*"]
     }
   },
   "include": [
@@ -35,7 +33,7 @@
     ".next/types/**/*.ts",
     "../next.config.ts",
     "next.config.js"
-  ],
+, "testPostmark.js", "scripts/sendTestEmail.js"  ],
   "exclude": [
     "node_modules"
   ]
