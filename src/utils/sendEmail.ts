@@ -1,7 +1,7 @@
-import postmark from "postmark";
+import { ServerClient } from "postmark";
 
 // Create Postmark client
-const client = new postmark.ServerClient(process.env.POSTMARK_SERVER_API_TOKEN);
+const client = new ServerClient(process.env.POSTMARK_SERVER_API_TOKEN!);
 
 // Function to send a simple test email
 export async function sendTestEmail() {
