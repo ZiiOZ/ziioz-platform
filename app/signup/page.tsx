@@ -43,6 +43,7 @@ export default function SignupPage() {
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            className="w-full px-4 py-2 border rounded"
             required
           />
           <input
@@ -50,9 +51,14 @@ export default function SignupPage() {
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            className="w-full px-4 py-2 border rounded"
             required
           />
-          <button type="submit" disabled={loading}>
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-black text-white py-2 rounded"
+          >
             {loading ? "Signing Up..." : "Sign Up"}
           </button>
           {error && <p className="text-red-600">{error}</p>}
