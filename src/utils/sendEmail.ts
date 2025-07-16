@@ -1,17 +1,43 @@
-import { ServerClient } from "postmark";
+import postmark from "postmark";
 
-const client = new ServerClient(process.env.POSTMARK_SERVER_API_TOKEN!);
+// Create Postmark client
+const client = new postmark.ServerClient(process.env.POSTMARK_SERVER_API_TOKEN);
 
-export async function sendWelcomeEmail(toEmail: string) {
-  await client.sendEmail({
-    From: "noreply@ziioz.com",
-    To: toEmail,
-    Subject: "Welcome to ZiiOZ",
-    HtmlBody: `
-      <h1>Welcome to ZiiOZ 🎉</h1>
-      <p>Thanks for joining our platform. We're excited to have you!</p>
-    `,
-    TextBody: "Welcome to ZiiOZ! Thanks for joining our platform.",
-    MessageStream: "outbound" // this is the default transactional stream
-  });
+// Function to send a simple test email
+export async function sendTestEmail() {
+  try {
+    const result = await client.sendEmail({
+      From: process.env.POSTMARK_FROM_EMAIL!,
+      To: "assist.ziioz@gmail.com", // Replace with your test recipient
+      Subject: "ZiiOZ Test Email",
+      HtmlBody: "<strong>This is a test email from ZiiOZ.</strong>",
+      TextBody: "This is a test email from ZiiOZ."
+    });
+    console.log("Test email sent:", result);
+    return result;
+  } catch (error) {
+    console.error("Error sending test email:", error);
+    throw error;
+  }
+}
+
+// Function to send a welcome email to a specific recipient
+export async function sendWelcomeEmail(recipient: string) {
+  try {
+    const result = await client.sendEmail({
+      From: process.env.POSTMARK_FROM_EMAIL!,
+      To: recipient,
+      Subject: "Welcome to ZiiOZ",
+      HtmlBody: `
+        <h1>Welcome to ZiiOZ 🎉</h1>
+        <p>Thanks for joining our platform. We're excited to have you on board.</p>
+      `,
+      TextBody: "Welcome to ZiiOZ! Thanks for joining our platform."
+    });
+    console.log("Welcome email sent:", result);
+    return result;
+  } catch (error) {
+    console.error("Error sending welcome email:", error);
+    throw error;
+  }
 }

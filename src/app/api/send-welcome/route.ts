@@ -1,5 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
-import { sendWelcomeEmail } from "@/src/utils/sendEmail";
+import { sendWelcomeEmail } from "@/utils/sendEmail";
+
+// Handle OPTIONS preflight
+export async function OPTIONS() {
+  return NextResponse.json(
+    {},
+    {
+      status: 200,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type",
+      },
+    }
+  );
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -8,18 +23,25 @@ export async function POST(req: NextRequest) {
     if (!email) {
       return NextResponse.json(
         { success: false, message: "Missing email" },
-        { status: 400 }
+        { status: 400, headers: { "Access-Control-Allow-Origin": "*" } }
       );
     }
 
-    await sendWelcomeEmail(email);
+    const result = await sendWelcomeEmail(email);
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json(
+      { success: true, result },
+      { headers: { "Access-Control-Allow-Origin": "*" } }
+    );
   } catch (error) {
     console.error("Error sending welcome email:", error);
     return NextResponse.json(
-      { success: false, message: "Internal server error" },
-      { status: 500 }
+      {
+        success: false,
+        message: "Internal server error",
+        error: String(error),
+      },
+      { status: 500, headers: { "Access-Control-Allow-Origin": "*" } }
     );
   }
 }
