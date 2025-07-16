@@ -12,10 +12,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // For now, use a dummy verification link or generate it as you prefer
     const verificationLink = "https://ziioz.com/verify/example";
 
-    // ✅ Call the function with TWO arguments
     await sendWelcomeEmail(email, verificationLink);
 
     return NextResponse.json({ success: true });
