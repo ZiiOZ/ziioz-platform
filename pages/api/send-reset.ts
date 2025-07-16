@@ -16,7 +16,7 @@ export default async function handler(
   }
 
   try {
-    await sendWelcomeEmail(email);
+  await sendWelcomeEmail(email, "https://ziioz.com/verify/example");
 
     res.status(200).json({ success: true });
   } catch (error) {
