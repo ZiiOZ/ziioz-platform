@@ -2,19 +2,26 @@ import { NextRequest, NextResponse } from "next/server";
 import { sendWelcomeEmail } from "@/utils/sendEmail";
 
 export async function POST(req: NextRequest) {
-  const { email } = await req.json();
+  try {
+    const { email } = await req.json();
 
-  if (!email) {
+    if (!email) {
+      return NextResponse.json(
+        { success: false, message: "Missing email" },
+        { status: 400 }
+      );
+    }
+
+    const verificationLink = "https://ziioz.com/verify/example";
+
+    await sendWelcomeEmail(email, verificationLink);
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("Error sending welcome email:", error);
     return NextResponse.json(
-      { success: false, message: "Missing email" },
-      { status: 400 }
+      { success: false, message: "Internal Server Error" },
+      { status: 500 }
     );
   }
-
-  const verificationLink = "https://ziioz.com/verify/example";
-
-  // THIS IS THE LINE THAT MUST BE CORRECT:
-  await sendWelcomeEmail(email, verificationLink);
-
-  return NextResponse.json({ success: true });
 }
