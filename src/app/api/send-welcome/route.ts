@@ -13,6 +13,7 @@ export async function POST(req: NextRequest) {
 
   const verificationLink = "https://ziioz.com/verify/example";
 
+  // THIS IS THE LINE THAT MUST BE CORRECT:
   await sendWelcomeEmail(email, verificationLink);
 
   return NextResponse.json({ success: true });
