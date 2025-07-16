@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
     // This is a dummy link for testing purposes
     const verificationLink = "https://ziioz.com/verify/test-link";
 
-    // THIS IS THE CORRECT WAY: pass BOTH arguments
+    // THIS CALL IS CORRECT: it passes both email and link
     await sendWelcomeEmail(email, verificationLink);
 
     return NextResponse.json({ success: true });
