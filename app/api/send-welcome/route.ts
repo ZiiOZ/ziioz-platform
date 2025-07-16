@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    await sendWelcomeEmail(email);
+  sendWelcomeEmail(email, resetLink)
 
     return NextResponse.json({ success: true });
   } catch (error) {
