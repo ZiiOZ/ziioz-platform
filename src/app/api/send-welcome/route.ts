@@ -12,10 +12,10 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // DUMMY LINK for testing
+    // Provide a dummy link for testing
     const verificationLink = "https://ziioz.com/verify/test-link";
 
-    // THIS IS THE CORRECT CALL
+    // ✅ CORRECT CALL: TWO ARGUMENTS
     await sendWelcomeEmail(email, verificationLink);
 
     return NextResponse.json({ success: true });
