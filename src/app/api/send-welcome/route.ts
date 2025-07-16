@@ -12,10 +12,10 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // This is a dummy link for testing purposes
+    // DUMMY LINK for testing
     const verificationLink = "https://ziioz.com/verify/test-link";
 
-    // THIS CALL IS CORRECT: it passes both email and link
+    // THIS IS THE CORRECT CALL
     await sendWelcomeEmail(email, verificationLink);
 
     return NextResponse.json({ success: true });
