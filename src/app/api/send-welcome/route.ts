@@ -12,9 +12,10 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Use a dummy link for testing this route
-    const verificationLink = "https://ziioz.com/verify/test";
+    // This is a dummy link for testing purposes
+    const verificationLink = "https://ziioz.com/verify/test-link";
 
+    // THIS IS THE CORRECT WAY: pass BOTH arguments
     await sendWelcomeEmail(email, verificationLink);
 
     return NextResponse.json({ success: true });
