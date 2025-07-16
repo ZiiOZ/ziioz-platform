@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { sendWelcomeEmail } from "@/src/utils/sendEmail";
+import { sendWelcomeEmail } from "@/utils/sendEmail";
 
 export async function POST(req: NextRequest) {
   try {
@@ -12,7 +12,10 @@ export async function POST(req: NextRequest) {
       );
     }
 
-  sendWelcomeEmail(email, resetLink)
+    // You must define a second argument value
+    const verificationLink = "https://ziioz.com/verify/example";
+
+    await sendWelcomeEmail(email, verificationLink);
 
     return NextResponse.json({ success: true });
   } catch (error) {
