@@ -12,8 +12,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Use a dummy link for testing
-    const verificationLink = "https://ziioz.com/verify?token=dummy-test-token";
+    // Use a dummy link for testing this route
+    const verificationLink = "https://ziioz.com/verify/test";
 
     await sendWelcomeEmail(email, verificationLink);
 
