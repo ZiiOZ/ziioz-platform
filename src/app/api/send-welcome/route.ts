@@ -1,25 +1,27 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextRequest, NextResponse } from "next/server";
 import { sendWelcomeEmail } from "@/utils/sendEmail";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ message: "Method not allowed" });
-  }
-
+export async function POST(req: NextRequest) {
   try {
-    const { email } = req.body;
+    const { email } = await req.json();
 
     if (!email) {
-      return res.status(400).json({ message: "Missing email" });
+      return NextResponse.json(
+        { success: false, message: "Missing email" },
+        { status: 400 }
+      );
     }
 
-    const verificationLink = "https://ziioz.com/reset-password/example";
+    const verificationLink = "https://ziioz.com/verify/example";
 
     await sendWelcomeEmail(email, verificationLink);
 
-    return res.status(200).json({ success: true });
+    return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Error sending reset email:", error);
-    return res.status(500).json({ message: "Internal Server Error" });
+    console.error("Error sending welcome email:", error);
+    return NextResponse.json(
+      { success: false, message: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 }
