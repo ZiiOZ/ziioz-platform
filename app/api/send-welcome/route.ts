@@ -1,33 +1,39 @@
 import { NextResponse } from 'next/server'
 import postmark from 'postmark'
 
-const serverToken = process.env.POSTMARK_API_KEY
-const fromEmail = 'support@ziioz.com'
+// Load from Vercel env vars
+const serverToken = process.env.POSTMARK_SERVER_API_TOKEN
+const fromEmail = process.env.POSTMARK_FROM_EMAIL || 'support@ziioz.com'
 
 export async function POST(req: Request) {
-  const { email } = await req.json()
-
-  if (!serverToken || !email) {
-    return NextResponse.json({ error: 'Missing Postmark token or email' }, { status: 400 })
-  }
-
-  const client = new postmark.ServerClient(serverToken)
-
   try {
+    const { email } = await req.json()
+
+    if (!serverToken || !email) {
+      return NextResponse.json({ error: 'Missing Postmark token or email' }, { status: 400 })
+    }
+
+    const client = new postmark.ServerClient(serverToken)
+
     await client.sendEmail({
       From: fromEmail,
       To: email,
-      Subject: 'Welcome to ZiiOZ 🚀',
+      Subject: '🚀 Welcome to ZiiOZ!',
       HtmlBody: `
-        <h1>Welcome to ZiiOZ!</h1>
-        <p>Your creative journey starts now.</p>
-        <p>Thanks for joining!</p>
-        <p>– The ZiiOZ Team</p>
+        <div style="font-family: sans-serif; line-height: 1.6">
+          <h1 style="color:#111">Welcome to <strong>ZiiOZ</strong> 🎉</h1>
+          <p>We’re thrilled to have you on board.</p>
+          <p>Start uploading, flicking, and boosting your way to creative success.</p>
+          <p style="margin-top:2em;">– The ZiiOZ Team</p>
+          <hr style="margin-top:2em;"/>
+          <small style="color:#888">This email was sent to ${email}</small>
+        </div>
       `
     })
 
     return NextResponse.json({ success: true })
   } catch (error) {
+    console.error('SendWelcome Error:', error)
     return NextResponse.json({ error: 'Email send failed' }, { status: 500 })
   }
 }
