@@ -12,12 +12,12 @@ export async function POST(req: Request) {
   }
 
   try {
-  const client = new ServerClient(process.env.POSTMARK_API_TOKEN!); // 🔥 Match Vercel name
+    const client = new ServerClient(process.env.POSTMARK_API_TOKEN!);
 
     const resetLink = `https://ziioz.com/reset-password?email=${encodeURIComponent(email)}`;
 
     await client.sendEmail({
-      From: 'support@ziioz.com',
+      From: process.env.POSTMARK_FROM_EMAIL!, // ✅ Use env var
       To: email,
       Subject: 'Reset Your ZiiOZ Password',
       HtmlBody: `
