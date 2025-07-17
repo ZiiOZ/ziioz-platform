@@ -1,8 +1,8 @@
 // app/api/reset/route.ts
 import { NextResponse } from 'next/server';
-import postmark from 'postmark';
+import { ServerClient } from 'postmark';
 
-const client = new postmark.ServerClient(process.env.POSTMARK_API_KEY!);
+const client = new ServerClient(process.env.POSTMARK_API_KEY!);
 
 export async function POST(req: Request) {
   const { email } = await req.json();
