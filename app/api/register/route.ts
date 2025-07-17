@@ -1,51 +1,45 @@
-import { NextResponse } from 'next/server'
-import postmark from 'postmark'
-import { createClient } from '@supabase/supabase-js'
+import { NextRequest, NextResponse } from 'next/server';
+import { createClient } from '@supabase/supabase-js';
+import { ServerClient } from 'postmark';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.NEXT_PUBLIC_SUPABASE_KEY!
-)
+);
 
-const serverToken = process.env.POSTMARK_API_KEY!
-const fromEmail = 'support@ziioz.com'
+const postmarkClient = new ServerClient(process.env.POSTMARK_API_KEY!);
 
-export async function POST(req: Request) {
-  const { email } = await req.json()
-
-  if (!serverToken || !email) {
-    return NextResponse.json({ error: 'Missing Postmark token or email' }, { status: 400 })
-  }
-
-  // Store user in Supabase
-  const { data, error } = await supabase
-    .from('users')
-    .insert([{ email }])
-    .select()
-
-  // If user already exists or insert failed, continue anyway
-  if (error && !error.message.includes('duplicate')) {
-    return NextResponse.json({ error: 'Failed to register user', detail: error.message }, { status: 500 })
-  }
-
-  // Send welcome email
-  const client = new postmark.ServerClient(serverToken)
-
+export async function POST(req: NextRequest) {
   try {
-    await client.sendEmail({
-      From: fromEmail,
-      To: email,
-      Subject: 'Welcome to ZiiOZ 🚀',
-      HtmlBody: `
-        <h1>Welcome to ZiiOZ!</h1>
-        <p>You're in. Your creative journey starts now.</p>
-        <p>Thanks for joining!</p>
-        <p>– The ZiiOZ Team</p>
-      `
-    })
+    const body = await req.json();
+    const { email } = body;
 
-    return NextResponse.json({ success: true })
-  } catch (err) {
-    return NextResponse.json({ error: 'Email send failed', detail: err }, { status: 500 })
+    if (!email || typeof email !== 'string') {
+      return NextResponse.json({ success: false, message: 'Invalid email' }, { status: 400 });
+    }
+
+    // Insert into users table
+    const { error: insertError } = await supabase
+      .from('users')
+      .insert([{ email }]);
+
+    if (insertError) {
+      return NextResponse.json({ success: false, message: 'Database insert error', error: insertError }, { status: 500 });
+    }
+
+    // Send welcome email using Postmark
+    await postmarkClient.sendEmail({
+      From: 'support@ziioz.com',
+      To: email,
+      Subject: 'Welcome to ZiiOZ',
+      HtmlBody: '<h1>Welcome to ZiiOZ 🎉</h1><p>You’ve successfully registered.</p>',
+      TextBody: 'Welcome to ZiiOZ! You’ve successfully registered.',
+      MessageStream: 'outbound',
+    });
+
+    return NextResponse.json({ success: true, message: `Registered ${email}` });
+  } catch (err: any) {
+    console.error('Error in register route:', err);
+    return NextResponse.json({ success: false, message: 'Internal error', error: err.message }, { status: 500 });
   }
 }
