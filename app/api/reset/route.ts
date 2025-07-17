@@ -14,7 +14,7 @@ export async function POST(req: Request) {
   try {
     const client = new ServerClient(process.env.POSTMARK_API_TOKEN!);
 
-    const resetLink = `https://ziioz.com/reset-password?email=${encodeURIComponent(email)}`;
+const resetLink = `https://ziioz-platform.vercel.app/reset-password?email=${email}`;
 
     await client.sendEmail({
       From: process.env.POSTMARK_FROM_EMAIL!, // ✅ Use env var
