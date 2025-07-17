@@ -1,45 +1,41 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
-import { ServerClient } from 'postmark';
+// app/api/register/route.ts
+import { ServerClient } from "postmark";
+import { createClient } from "@supabase/supabase-js";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_KEY!
-);
-
-const postmarkClient = new ServerClient(process.env.POSTMARK_API_KEY!);
-
-export async function POST(req: NextRequest) {
+export async function POST(req: Request) {
   try {
-    const body = await req.json();
-    const { email } = body;
+    const { email } = await req.json();
 
-    if (!email || typeof email !== 'string') {
-      return NextResponse.json({ success: false, message: 'Invalid email' }, { status: 400 });
+    if (!email) {
+      return new Response(JSON.stringify({ success: false, message: "Missing email." }), { status: 400 });
     }
 
-    // Insert into users table
-    const { error: insertError } = await supabase
-      .from('users')
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_KEY!
+    );
+
+    const { error } = await supabase
+      .from("user_emails")
       .insert([{ email }]);
 
-    if (insertError) {
-      return NextResponse.json({ success: false, message: 'Database insert error', error: insertError }, { status: 500 });
+    if (error) {
+      console.error("Supabase insert error:", error);
+      return new Response(JSON.stringify({ success: false, message: "Database error." }), { status: 500 });
     }
 
-    // Send welcome email using Postmark
-    await postmarkClient.sendEmail({
-      From: 'support@ziioz.com',
+    const client = new ServerClient(process.env.POSTMARK_SERVER_API_TOKEN!);
+
+    await client.sendEmail({
+      From: process.env.POSTMARK_FROM_EMAIL!,
       To: email,
-      Subject: 'Welcome to ZiiOZ',
-      HtmlBody: '<h1>Welcome to ZiiOZ 🎉</h1><p>You’ve successfully registered.</p>',
-      TextBody: 'Welcome to ZiiOZ! You’ve successfully registered.',
-      MessageStream: 'outbound',
+      Subject: "🎉 Welcome to ZiiOZ",
+      HtmlBody: `<h1>You're in 🎉</h1><p>Thanks for joining ZiiOZ. Explore now!</p>`,
     });
 
-    return NextResponse.json({ success: true, message: `Registered ${email}` });
-  } catch (err: any) {
-    console.error('Error in register route:', err);
-    return NextResponse.json({ success: false, message: 'Internal error', error: err.message }, { status: 500 });
+    return new Response(JSON.stringify({ success: true, message: `Registered ${email}` }), { status: 200 });
+  } catch (err) {
+    console.error("Error in /api/register:", err);
+    return new Response(JSON.stringify({ success: false, message: "Something went wrong." }), { status: 500 });
   }
 }
