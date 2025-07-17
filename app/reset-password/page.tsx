@@ -1,4 +1,3 @@
-// app/reset-password/page.tsx
 'use client';
 
 import { useSearchParams } from 'next/navigation';
@@ -6,7 +5,7 @@ import { useEffect, useState } from 'react';
 
 export default function ResetPasswordPage() {
   const searchParams = useSearchParams();
-  const email = searchParams.get('email');
+  const email = searchParams?.get('email');
   const [valid, setValid] = useState(false);
 
   useEffect(() => {
