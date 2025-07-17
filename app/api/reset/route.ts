@@ -2,8 +2,6 @@
 import { NextResponse } from 'next/server';
 import { ServerClient } from 'postmark';
 
-const client = new ServerClient(process.env.POSTMARK_SERVER_API_TOKEN!); // ✅ Corrected here
-
 export async function POST(req: Request) {
   const { email } = await req.json();
 
@@ -12,6 +10,8 @@ export async function POST(req: Request) {
   }
 
   try {
+    const client = new ServerClient(process.env.POSTMARK_SERVER_API_TOKEN!); // ✅ Move it here
+
     const resetLink = `https://ziioz.com/reset-password?email=${encodeURIComponent(email)}`;
 
     await client.sendEmail({
