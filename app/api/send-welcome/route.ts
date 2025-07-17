@@ -1,39 +1,48 @@
-import { NextResponse } from 'next/server'
-import postmark from 'postmark'
-
-// Load from Vercel env vars
-const serverToken = process.env.POSTMARK_SERVER_API_TOKEN
-const fromEmail = process.env.POSTMARK_FROM_EMAIL || 'support@ziioz.com'
+// app/api/send-welcome/route.ts
+import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
   try {
-    const { email } = await req.json()
+    const { email } = await req.json();
 
-    if (!serverToken || !email) {
-      return NextResponse.json({ error: 'Missing Postmark token or email' }, { status: 400 })
+    if (!email) {
+      return NextResponse.json({ error: 'Missing email' }, { status: 400 });
     }
 
-    const client = new postmark.ServerClient(serverToken)
+    const POSTMARK_TOKEN = process.env.POSTMARK_SERVER_API_TOKEN!;
+    const FROM_EMAIL = process.env.POSTMARK_FROM_EMAIL || 'no-reply@ziioz.com';
 
-    await client.sendEmail({
-      From: fromEmail,
-      To: email,
-      Subject: '🚀 Welcome to ZiiOZ!',
-      HtmlBody: `
-        <div style="font-family: sans-serif; line-height: 1.6">
-          <h1 style="color:#111">Welcome to <strong>ZiiOZ</strong> 🎉</h1>
-          <p>We’re thrilled to have you on board.</p>
-          <p>Start uploading, flicking, and boosting your way to creative success.</p>
-          <p style="margin-top:2em;">– The ZiiOZ Team</p>
-          <hr style="margin-top:2em;"/>
-          <small style="color:#888">This email was sent to ${email}</small>
-        </div>
-      `
-    })
+    const res = await fetch('https://api.postmarkapp.com/email', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'X-Postmark-Server-Token': POSTMARK_TOKEN,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        From: FROM_EMAIL,
+        To: email,
+        Subject: 'Welcome to ZiiOZ – Confirm Your Email',
+        HtmlBody: `
+          <div style="font-family: Arial, sans-serif; padding: 20px;">
+            <h2>🎉 Welcome to ZiiOZ!</h2>
+            <p>Thanks for signing up! You're now part of something special.</p>
+            <p>Let's get started — <strong>your account is ready</strong>.</p>
+            <br/>
+            <p>❤️ The ZiiOZ Team</p>
+          </div>
+        `,
+        MessageStream: 'defaultTransactional',
+      }),
+    });
 
-    return NextResponse.json({ success: true })
+    if (!res.ok) {
+      const error = await res.json();
+      return NextResponse.json({ error: 'Email send failed', detail: error }, { status: 500 });
+    }
+
+    return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('SendWelcome Error:', error)
-    return NextResponse.json({ error: 'Email send failed' }, { status: 500 })
+    return NextResponse.json({ error: 'Unexpected error', detail: (error as any).message }, { status: 500 });
   }
 }
