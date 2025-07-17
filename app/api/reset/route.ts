@@ -1,3 +1,4 @@
+// app/api/reset/route.ts
 export const dynamic = 'force-dynamic';
 
 import { NextResponse } from 'next/server';
@@ -5,7 +6,7 @@ import { ServerClient } from 'postmark';
 
 export async function POST(req: Request) {
   const { email } = await req.json();
-
+  
   if (!email) {
     return NextResponse.json({ success: false, message: 'Missing email' }, { status: 400 });
   }
