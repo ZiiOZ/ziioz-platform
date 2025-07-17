@@ -1,4 +1,3 @@
-// app/api/send-welcome/route.ts
 import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
@@ -10,7 +9,7 @@ export async function POST(req: Request) {
     }
 
     const POSTMARK_TOKEN = process.env.POSTMARK_SERVER_API_TOKEN!;
-    const FROM_EMAIL = process.env.POSTMARK_FROM_EMAIL || 'no-reply@ziioz.com';
+    const FROM_EMAIL = process.env.POSTMARK_FROM_EMAIL || 'support@ziioz.com';
 
     const res = await fetch('https://api.postmarkapp.com/email', {
       method: 'POST',
@@ -32,7 +31,7 @@ export async function POST(req: Request) {
             <p>❤️ The ZiiOZ Team</p>
           </div>
         `,
-        MessageStream: 'defaultTransactional',
+        MessageStream: 'outbound', // 👈 fix here
       }),
     });
 
