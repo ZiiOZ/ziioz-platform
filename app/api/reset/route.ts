@@ -2,7 +2,7 @@
 import { NextResponse } from 'next/server';
 import { ServerClient } from 'postmark';
 
-const client = new ServerClient(process.env.POSTMARK_API_KEY!);
+const client = new ServerClient(process.env.POSTMARK_SERVER_API_TOKEN!); // ✅ Corrected here
 
 export async function POST(req: Request) {
   const { email } = await req.json();
