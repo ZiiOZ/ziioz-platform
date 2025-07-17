@@ -1,4 +1,5 @@
-// app/api/reset/route.ts
+export const dynamic = "force-dynamic";
+
 import { NextResponse } from 'next/server';
 import { ServerClient } from 'postmark';
 
@@ -10,7 +11,7 @@ export async function POST(req: Request) {
   }
 
   try {
-    const client = new ServerClient(process.env.POSTMARK_SERVER_API_TOKEN!); // ✅ Move it here
+    const client = new ServerClient(process.env.POSTMARK_SERVER_API_TOKEN!);
 
     const resetLink = `https://ziioz.com/reset-password?email=${encodeURIComponent(email)}`;
 
