@@ -12,7 +12,7 @@ export async function POST(req: Request) {
   }
 
   try {
-    const client = new ServerClient(process.env.POSTMARK_SERVER_API_TOKEN!);
+  const client = new ServerClient(process.env.POSTMARK_API_TOKEN!); // 🔥 Match Vercel name
 
     const resetLink = `https://ziioz.com/reset-password?email=${encodeURIComponent(email)}`;
 
