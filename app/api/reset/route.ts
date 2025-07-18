@@ -3,12 +3,14 @@ import { cookies as getCookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
+  const cookieStore = await getCookies(); // ✅ Await this line
+
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!,
     {
       cookies: {
-        get: (name: string) => getCookies().get(name)?.value,
+        get: (name: string) => cookieStore.get(name)?.value,
         set: () => {},
         remove: () => {}
       }
