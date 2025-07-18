@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
-import { cookies } from 'next/headers'; // ✅ required in Next.js 13+
+import { cookies as getCookies } from 'next/headers';
 
 export async function POST(req: Request) {
   const requestUrl = new URL(req.url);
@@ -9,13 +9,15 @@ export async function POST(req: Request) {
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!,
-    { cookies } // ✅ Pass cookies for SSR context
+    {
+      cookies: getCookies() // ✅ CORRECT FORMAT
+    }
   );
 
   const { data, error } = await supabase.auth.admin.generateLink({
     type: 'signup',
     email,
-    password: 'temporary-placeholder-password', // ✅ Supabase requires this
+    password: 'temporary-placeholder-password',
     options: {
       redirectTo: `${requestUrl.origin}/auth/callback`
     }
