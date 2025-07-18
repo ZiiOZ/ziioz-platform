@@ -1,37 +1,32 @@
-// app/api/reset/route.ts
-export const dynamic = 'force-dynamic';
-
+// /app/api/reset/route.ts
 import { NextResponse } from 'next/server';
-import { ServerClient } from 'postmark';
+import { Resend } from 'resend'; // or Postmark depending on your setup
+import { PostmarkClient } from 'postmark';
+
+const postmark = new PostmarkClient(process.env.POSTMARK_API_KEY!);
 
 export async function POST(req: Request) {
   const { email } = await req.json();
-  
-  if (!email) {
-    return NextResponse.json({ success: false, message: 'Missing email' }, { status: 400 });
+
+  if (!email || typeof email !== 'string') {
+    return NextResponse.json({ error: 'Missing or invalid email' }, { status: 400 });
   }
 
+  const resetLink = `https://ziioz-platform.vercel.app/reset-password?email=${encodeURIComponent(email)}`;
+
   try {
-    const client = new ServerClient(process.env.POSTMARK_API_TOKEN!);
-
-const resetLink = `https://ziioz-platform.vercel.app/reset-password?email=${email}`;
-
-    await client.sendEmail({
-      From: process.env.POSTMARK_FROM_EMAIL!, // ✅ Use env var
+    const result = await postmark.sendEmailWithTemplate({
+      From: 'support@ziioz.com',
       To: email,
-      Subject: 'Reset Your ZiiOZ Password',
-      HtmlBody: `
-        <p>Hi there 👋</p>
-        <p>Click the button below to reset your password:</p>
-        <p><a href="${resetLink}" style="background-color:#000;color:white;padding:10px 20px;border-radius:8px;text-decoration:none;">Reset Password</a></p>
-        <p>If you didn’t request this, you can ignore this email.</p>
-        <p>— The ZiiOZ Team</p>
-      `
+      TemplateAlias: 'welcome', // or whatever alias you're using
+      TemplateModel: {
+        email,
+        year: new Date().getFullYear(),
+      },
     });
 
-    return NextResponse.json({ success: true, message: 'Password reset sent.' });
-  } catch (error) {
-    console.error('Reset email error:', error);
-    return NextResponse.json({ success: false, message: 'Reset email failed.' }, { status: 500 });
+    return NextResponse.json({ success: true, result });
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
