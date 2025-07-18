@@ -1,29 +1,28 @@
-// app/api/generate-link/route.ts
 import { NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+import { createServerClient } from '@supabase/ssr';
 
 export async function POST(req: Request) {
+  const requestUrl = new URL(req.url);
   const { email } = await req.json();
+
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
 
   const { data, error } = await supabase.auth.admin.generateLink({
     type: 'signup',
     email,
+    password: 'temporary-placeholder-password', // ✅ Required field
     options: {
-      redirectTo: 'https://ziioz.com/confirm' // Or wherever your redirect lives
+      redirectTo: `${requestUrl.origin}/auth/callback`
     }
   });
 
   if (error) {
-    console.error(error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    console.error('Generate link failed:', error.message);
+    return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }
 
-  const confirmation_url = data?.properties?.action_link;
-
-  return NextResponse.json({ confirmation_url });
+  return NextResponse.json({ success: true, data });
 }
