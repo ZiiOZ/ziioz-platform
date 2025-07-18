@@ -1,50 +1,37 @@
-// app/api/send-welcome/route.ts
-
 import { NextResponse } from "next/server";
-import { Resend } from "resend";
+import { Client } from "postmark";
 
-const resend = new Resend(process.env.POSTMARK_SERVER_API_TOKEN);
-const FROM_EMAIL = process.env.POSTMARK_FROM_EMAIL || "no-reply@ziioz.com";
+const postmarkClient = new Client(process.env.POSTMARK_API_KEY!);
 
 export async function POST(req: Request) {
   try {
     const { email } = await req.json();
 
     if (!email) {
-      return NextResponse.json(
-        { success: false, message: "Email is required." },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Email is required." }, { status: 400 });
     }
 
-    const response = await resend.emails.send({
-      from: `ZiiOZ <${FROM_EMAIL}>`,
-      to: email,
-      subject: "Welcome to ZiiOZ 🎉",
-      html: `
-        <div style="font-family: Arial, sans-serif; text-align: center; padding: 40px">
-          <h1>👋 Welcome to <strong>ZiiOZ</strong></h1>
-          <p>You're in. ZiiOZ is the future of social — smart and fast for creators like you.</p>
-          <a href="https://ziioz.com" style="padding: 12px 20px; background: black; color: white; border-radius: 5px; text-decoration: none;">Explore ZiiOZ</a>
-          <p style="color: #888; font-size: 14px; margin-top: 30px;">Didn’t request this? Ignore this email.</p>
+    const sendResult = await postmarkClient.sendEmail({
+      From: "welcome@ziioz.com",
+      To: email,
+      Subject: "🎉 Welcome to ZiiOZ!",
+      HtmlBody: `
+        <div style="font-family: sans-serif; text-align: center;">
+          <h2>Welcome to ZiiOZ 🎉</h2>
+          <p>We're thrilled to have you on board.</p>
+          <p>Start creating, exploring, and sharing right now.</p>
+          <br/>
+          <a href="https://ziioz.com" style="background-color: black; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Visit ZiiOZ</a>
+          <p style="margin-top: 30px; font-size: 12px; color: gray;">Powered by Street Visual / W&R Buhagiar Family Trust</p>
         </div>
       `,
+      TextBody: "Welcome to ZiiOZ! We're thrilled to have you here.",
+      MessageStream: "outbound" // Or "broadcast" if you're using a different stream
     });
 
-    if (response.error) {
-      console.error("📩 Resend Email Error:", response.error);
-      return NextResponse.json(
-        { success: false, message: "Resend failed.", details: response.error },
-        { status: 500 }
-      );
-    }
-
-    return NextResponse.json({ success: true, message: "Email sent." });
-  } catch (e) {
-    console.error("🔥 Server Crash:", e);
-    return NextResponse.json(
-      { success: false, message: "Internal error.", error: e },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: true, messageId: sendResult.MessageID });
+  } catch (error) {
+    console.error("Postmark send error:", error);
+    return NextResponse.json({ error: "Failed to send welcome email" }, { status: 500 });
   }
 }
