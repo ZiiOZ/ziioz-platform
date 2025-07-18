@@ -1,32 +1,37 @@
-// /app/api/reset/route.ts
-import { NextResponse } from 'next/server';
-import { Resend } from 'resend'; // or Postmark depending on your setup
-import { PostmarkClient } from 'postmark';
+import { NextResponse } from "next/server";
+import { ServerClient } from "postmark";
 
-const postmark = new PostmarkClient(process.env.POSTMARK_API_KEY!);
+const postmark = new ServerClient(process.env.POSTMARK_API_KEY!);
 
 export async function POST(req: Request) {
-  const { email } = await req.json();
-
-  if (!email || typeof email !== 'string') {
-    return NextResponse.json({ error: 'Missing or invalid email' }, { status: 400 });
-  }
-
-  const resetLink = `https://ziioz-platform.vercel.app/reset-password?email=${encodeURIComponent(email)}`;
-
   try {
-    const result = await postmark.sendEmailWithTemplate({
-      From: 'support@ziioz.com',
+    const { email } = await req.json();
+
+    if (!email) {
+      return NextResponse.json(
+        { success: false, message: "Email is required." },
+        { status: 400 }
+      );
+    }
+
+    const result = await postmark.sendEmail({
+      From: "support@ziioz.com", // ✅ Your verified Postmark sender
       To: email,
-      TemplateAlias: 'welcome', // or whatever alias you're using
-      TemplateModel: {
-        email,
-        year: new Date().getFullYear(),
-      },
+      Subject: "Reset Your ZiiOZ Password",
+      HtmlBody: `<p>Click the link below to reset your password:</p>
+                 <p><a href="https://www.ziioz.com/reset?email=${encodeURIComponent(email)}">Reset Password</a></p>`,
+      TextBody: `Reset your password by visiting: https://www.ziioz.com/reset?email=${email}`,
+      MessageStream: "outbound", // ✅ Default stream unless you're using transactional/bulk
     });
 
-    return NextResponse.json({ success: true, result });
+    console.log("Email sent result:", result);
+
+    return NextResponse.json({ success: true, message: "Reset email sent." });
   } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    console.error("Postmark error:", error);
+    return NextResponse.json(
+      { success: false, message: error?.message || "Reset email failed." },
+      { status: 500 }
+    );
   }
 }
