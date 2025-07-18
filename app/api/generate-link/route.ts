@@ -6,11 +6,13 @@ export async function POST(req: Request) {
   const requestUrl = new URL(req.url);
   const { email } = await req.json();
 
+  const cookieStore = await getCookies(); // ✅ Await here
+
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!,
     {
-      cookies: getCookies() // ✅ CORRECT FORMAT
+      cookies: cookieStore
     }
   );
 
