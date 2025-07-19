@@ -1,43 +1,23 @@
-import React from "react";
+'use client';
 
-interface VibeTabsProps {
-  active: string;
-  onSelect: (vibe: string) => void;
-}
+import { useState } from 'react';
 
-export default function VibeTabs({ active, onSelect }: VibeTabsProps) {
-  const tabs = [
-    { key: "trending", label: "Trending" },
-    { key: "fresh", label: "Fresh" },
-    { key: "underground", label: "Underground" },
-  ];
+const tabs = ['Trending', 'Fresh', 'Underground'];
+
+export default function VibeTabs() {
+  const [active, setActive] = useState('Trending');
 
   return (
-    <div
-      style={{
-        display: "flex",
-        gap: "24px",
-        borderBottom: "1px solid #333",
-        paddingBottom: "8px",
-      }}
-    >
+    <div className="flex justify-center space-x-4 py-3 border-b border-gray-300">
       {tabs.map((tab) => (
         <button
-          key={tab.key}
-          onClick={() => onSelect(tab.key)}
-          style={{
-            border: "none",
-            background: "none",
-            color: active === tab.key ? "#FFFFFF" : "#888888",
-            fontWeight: active === tab.key ? "600" : "400",
-            paddingBottom: "4px",
-            borderBottom:
-              active === tab.key ? "2px solid #FFFFFF" : "2px solid transparent",
-            cursor: "pointer",
-            fontSize: "16px",
-          }}
+          key={tab}
+          onClick={() => setActive(tab)}
+          className={`text-sm px-4 py-1 rounded-full font-medium transition ${
+            active === tab ? 'bg-black text-white' : 'bg-gray-200 text-gray-800'
+          }`}
         >
-          {tab.label}
+          {tab}
         </button>
       ))}
     </div>
