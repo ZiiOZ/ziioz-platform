@@ -1,35 +1,43 @@
+// app/page.tsx
+'use client';
+import Image from 'next/image';
+
 export default function HomePage() {
   return (
-    <main className="min-h-screen bg-white text-black flex flex-col items-center">
-      {/* Logo top */}
-      <header className="w-full flex justify-center pt-6">
-        <img
-          src="/settings/logo-black.png"
+    <main className="min-h-screen bg-white text-black flex flex-col items-center justify-start pt-10 px-4">
+      {/* Logo */}
+      <div className="mb-6">
+        <Image
+          src="/logo-black.png"
           alt="ZiiOZ Logo"
-          className="w-16 h-16 object-contain"
+          width={140}
+          height={40}
+          priority
         />
-      </header>
+      </div>
 
       {/* Tabs */}
-      <nav className="mt-6 flex gap-6 font-semibold text-sm border-b pb-2">
-        <button className="hover:text-gray-600">Trending</button>
-        <button className="hover:text-gray-600">Fresh</button>
-        <button className="hover:text-gray-600">Underground</button>
-      </nav>
+      <div className="flex gap-6 text-lg font-medium mb-8 border-b border-gray-200">
+        <span className="cursor-pointer pb-2 border-b-2 border-black">Trending</span>
+        <span className="cursor-pointer pb-2 text-gray-500 hover:text-black">Fresh</span>
+        <span className="cursor-pointer pb-2 text-gray-500 hover:text-black">Underground</span>
+      </div>
 
-      {/* Mock Feed Phone Preview */}
-      <section className="mt-10 w-[320px] h-[640px] border border-gray-300 rounded-2xl shadow-lg overflow-hidden bg-gray-100">
-        {/* Fake post */}
-        <div className="p-4 border-b border-gray-300">
-          <div className="font-bold">@ziioz_creator</div>
-          <img
-            src="/placeholder-profile.png"
-            alt="Post"
-            className="w-full mt-2 rounded-md"
-          />
-          <p className="text-sm mt-2">This is a mock post inside the phone preview.</p>
-        </div>
-      </section>
+      {/* Phone Mockup */}
+      <div className="w-full max-w-sm">
+        <Image
+          src="/mockup-phone.png"
+          alt="ZiiOZ App Preview"
+          width={400}
+          height={800}
+          className="rounded-xl shadow-xl mx-auto"
+        />
+      </div>
+
+      {/* Optional Tagline */}
+      <p className="mt-6 text-center text-sm text-gray-600">
+        Experience the next wave of social.
+      </p>
     </main>
   );
 }
