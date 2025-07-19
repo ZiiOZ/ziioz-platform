@@ -1,56 +1,35 @@
-'use client';
-
 export default function HomePage() {
   return (
-    <div className="flex flex-col items-center min-h-screen bg-white">
-      {/* Logo at the top */}
-      <div className="pt-10">
+    <main className="min-h-screen bg-white text-black flex flex-col items-center">
+      {/* Logo top */}
+      <header className="w-full flex justify-center pt-6">
         <img
           src="/settings/logo-black.png"
           alt="ZiiOZ Logo"
-          className="h-20 w-auto"
+          className="w-16 h-16 object-contain"
         />
-      </div>
+      </header>
 
-      {/* Nav Tabs */}
-      <div className="mt-8 flex space-x-8 border-b border-gray-200">
-        <button className="pb-2 text-lg font-semibold text-gray-800 border-b-2 border-black">
-          Trending
-        </button>
-        <button className="pb-2 text-lg font-semibold text-gray-500 hover:text-black">
-          Fresh
-        </button>
-        <button className="pb-2 text-lg font-semibold text-gray-500 hover:text-black">
-          Underground
-        </button>
-      </div>
+      {/* Tabs */}
+      <nav className="mt-6 flex gap-6 font-semibold text-sm border-b pb-2">
+        <button className="hover:text-gray-600">Trending</button>
+        <button className="hover:text-gray-600">Fresh</button>
+        <button className="hover:text-gray-600">Underground</button>
+      </nav>
 
-      {/* Optional Post Preview (Commented out for now) */}
-      {/* <div className="mt-10 w-full max-w-md px-4">
-        <div className="border rounded-xl shadow-md p-4">
-          <div className="font-semibold mb-2">@ziiozuser</div>
+      {/* Mock Feed Phone Preview */}
+      <section className="mt-10 w-[320px] h-[640px] border border-gray-300 rounded-2xl shadow-lg overflow-hidden bg-gray-100">
+        {/* Fake post */}
+        <div className="p-4 border-b border-gray-300">
+          <div className="font-bold">@ziioz_creator</div>
           <img
-            src="/sample-post.jpg"
-            alt="Post preview"
-            className="rounded-md w-full mb-2"
+            src="/placeholder-profile.png"
+            alt="Post"
+            className="w-full mt-2 rounded-md"
           />
-          <div className="flex space-x-4 text-gray-600">
-            <span>❤️ 123</span>
-            <span>💬 45</span>
-          </div>
+          <p className="text-sm mt-2">This is a mock post inside the phone preview.</p>
         </div>
-      </div> */}
-
-      {/* Footer */}
-      <footer className="mt-auto py-6 text-xs text-gray-400">
-        <a href="/settings/terms.html" className="hover:underline">
-          Terms
-        </a>{' '}
-        |{' '}
-        <a href="/settings/privacy.html" className="hover:underline">
-          Privacy
-        </a>
-      </footer>
-    </div>
+      </section>
+    </main>
   );
 }
