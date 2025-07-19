@@ -1,22 +1,21 @@
-// ✅ CORRECT STRUCTURE
-import LogoHeader from "@/components/LogoHeader";
-import NavTabs from "@/components/NavTabs";
-import PreviewPost from "@/components/PreviewPost";
-import Features from "@/components/Features";
+import Image from 'next/image';
+import Link from 'next/link';
+import LogoHeader from '@/components/LogoHeader';
+import NavTabs from '@/components/NavTabs';
+import MockPost from '@/components/MockPost';
 
 export default function HomePage() {
   return (
-    <main className="bg-white text-black min-h-screen">
+    <main className="bg-white text-black min-h-screen flex flex-col items-center px-4">
       <LogoHeader />
       <NavTabs />
-      <PreviewPost />
-      <Features />
-      <footer className="text-center text-sm p-6 border-t mt-12">
-        <div className="mt-2">
-          <a href="/settings/legal/About" className="underline mr-4">About</a>
-          <a href="/settings/legal/PrivacyPolicy" className="underline mr-4">Privacy Policy</a>
-          <a href="/settings/legal/TermsOfService" className="underline">Terms of Service</a>
-        </div>
+      <section className="w-full max-w-md mt-6">
+        <MockPost />
+      </section>
+      <footer className="text-xs text-center mt-16 mb-6 space-x-4 text-gray-500">
+        <Link href="/settings/privacy">Privacy Policy</Link>
+        <Link href="/settings/terms">Terms of Service</Link>
+        <Link href="/settings/about">About</Link>
       </footer>
     </main>
   );
