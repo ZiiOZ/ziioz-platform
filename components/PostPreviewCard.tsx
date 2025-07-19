@@ -2,7 +2,13 @@
 
 import Image from 'next/image';
 
-export default function PostPreviewCard() {
+type Props = {
+  username: string;
+  timeAgo: string;
+  text: string;
+};
+
+export default function PostPreviewCard({ username, timeAgo, text }: Props) {
   return (
     <div className="border p-4 rounded-lg shadow-sm bg-white">
       <div className="flex items-center space-x-2">
@@ -14,13 +20,11 @@ export default function PostPreviewCard() {
           className="rounded-full"
         />
         <div>
-          <p className="text-sm font-semibold">@ziioz_creator</p>
-          <p className="text-xs text-gray-500">5 mins ago</p>
+          <p className="text-sm font-semibold">{username}</p>
+          <p className="text-xs text-gray-500">{timeAgo}</p>
         </div>
       </div>
-      <p className="mt-3 text-sm">
-        Catching the vibe with ZiiOZ ✨ The world’s next movement is just getting started...
-      </p>
+      <p className="mt-3 text-sm">{text}</p>
     </div>
   );
 }
