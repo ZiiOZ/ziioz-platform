@@ -1,6 +1,6 @@
-export default function HomePage() {
+export default function Home() {
   return (
-    <main
+    <div
       style={{
         display: 'flex',
         justifyContent: 'center',
@@ -15,6 +15,6 @@ export default function HomePage() {
         alt="ZiiOZ Logo"
         style={{ width: '160px', height: 'auto' }}
       />
-    </main>
+    </div>
   );
 }
