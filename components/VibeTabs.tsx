@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import PostPreviewCard from '@/components/post-preview-card';
+import PostPreviewCard from '@/components/PostPreviewCard';
 
 export default function HomePage() {
   return (
