@@ -17,7 +17,7 @@ export default function ZiiPostsPage() {
       </section>
 
       <footer className="text-center text-xs mt-20 opacity-50">
-        Powered by ZiiOZ • Street Visual Pty Ltd © {new Date().getFullYear()}
+        Powered by ZiiOZ© {new Date().getFullYear()}
       </footer>
     </main>
   );
