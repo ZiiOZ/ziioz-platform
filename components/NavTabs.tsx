@@ -1,9 +1,11 @@
+'use client';
+
 export default function NavTabs() {
   return (
-    <div className="flex justify-center gap-8 border-b mb-8 text-sm font-medium text-gray-700">
-      <button className="pb-2 border-b-2 border-black text-black">Trending</button>
-      <button className="pb-2 hover:text-black hover:border-black border-b-2 border-transparent">Fresh</button>
-      <button className="pb-2 hover:text-black hover:border-black border-b-2 border-transparent">Underground</button>
+    <div className="flex justify-center gap-4 mt-2 text-sm font-semibold">
+      <button className="border-b-2 border-black pb-1">Trending</button>
+      <button className="text-gray-500 hover:text-black">Fresh</button>
+      <button className="text-gray-500 hover:text-black">Underground</button>
     </div>
   );
 }
