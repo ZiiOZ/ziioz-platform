@@ -1,12 +1,10 @@
-'use client';
-
 export default function LogoHeader() {
   return (
-    <div className="py-6">
+    <div className="pt-8 text-center">
       <img
-        src="/logo-black.png"
+        src="/ziioz-logo.png"
         alt="ZiiOZ Logo"
-        className="h-16 w-auto mx-auto"
+        className="mx-auto w-28 h-auto"
       />
     </div>
   );
