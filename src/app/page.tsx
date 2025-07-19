@@ -1,21 +1,18 @@
-export default function HomePage() {
+export default function Home() {
   return (
     <main
       style={{
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        minHeight: '100vh',
-        backgroundColor: '#ffffff',
+        height: '100vh',
+        background: '#fff',
       }}
     >
       <img
         src="/settings/logo-black.png"
         alt="ZiiOZ Logo"
-        style={{
-          width: '140px',
-          height: 'auto',
-        }}
+        style={{ width: '160px', height: 'auto' }}
       />
     </main>
   );
