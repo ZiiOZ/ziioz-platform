@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Optional: basic body cleanup */
+body {
+  font-family: sans-serif;
+  line-height: 1.5;
+}
