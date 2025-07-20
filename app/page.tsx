@@ -1,10 +1,16 @@
+import logo from "@/assets/logo-black.png";
+import mockup from "@/assets/mockup-iphone.png";
+import Image from "next/image";
+
 export default function HomePage() {
   return (
     <main className="flex flex-col items-center justify-center min-h-screen bg-white text-black px-4 py-12">
-      <img
-        src="/logo-black.png"
+      <Image
+        src={logo}
         alt="ZiiOZ Logo"
-        className="w-24 h-auto mb-4"
+        width={96}
+        height={96}
+        className="mb-4"
       />
 
       <div className="flex gap-6 text-lg font-semibold mb-4">
@@ -13,10 +19,12 @@ export default function HomePage() {
         <span>🖤 Underground</span>
       </div>
 
-      <img
-        src="/mockup-iphone-ziioz-tabs.png"
+      <Image
+        src={mockup}
         alt="ZiiOZ App Preview"
-        className="w-[300px] max-w-full rounded-xl shadow-lg mb-6"
+        width={300}
+        height={600}
+        className="rounded-xl shadow-lg mb-6"
       />
 
       <p className="text-center text-lg text-gray-800 max-w-xl px-2">
