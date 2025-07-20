@@ -1,13 +1,13 @@
 export default function LandingPage() {
   return (
-    <main className="flex flex-col md:flex-row items-center justify-center w-full min-h-screen px-6 py-10">
-      <div className="max-w-6xl w-full flex flex-col md:flex-row items-center justify-between">
+    <main className="flex flex-col md:flex-row items-center justify-center min-h-screen px-4 md:px-12 py-10 overflow-hidden">
+      <div className="flex flex-col md:flex-row items-center justify-center max-w-5xl w-full gap-8">
         {/* Left: Image */}
-        <div className="w-full md:w-1/2 flex justify-center items-center px-4">
+        <div className="flex justify-center w-full md:w-1/2">
           <img
             src="/ziioz-preview.png"
             alt="ZiiOZ Preview"
-            className="w-full max-w-xs md:max-w-sm h-auto object-contain"
+            className="w-full max-w-[320px] md:max-w-[400px] h-auto object-contain"
           />
         </div>
 
