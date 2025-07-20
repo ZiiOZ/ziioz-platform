@@ -1,11 +1,13 @@
 export default function LandingPage() {
   return (
-    <main className="min-h-screen flex items-center justify-center px-4 py-10 bg-white">
-      <img
-        src="/ziioz-preview.png"
-        alt="ZiiOZ Preview"
-        className="w-full max-w-[480px] md:max-w-[600px] h-auto object-contain"
-      />
+    <main className="flex items-center justify-center min-h-screen px-4 py-10 bg-white">
+      <div className="w-full max-w-md flex flex-col items-center">
+        <img
+          src="/ziioz-preview.png"
+          alt="ZiiOZ Preview"
+          className="w-full h-auto object-contain"
+        />
+      </div>
     </main>
   );
 }
