@@ -6,9 +6,9 @@ export default function Home() {
   const [open, setOpen] = useState(false);
 
   return (
-    <main className="min-h-screen bg-white flex flex-col items-center justify-center px-4 py-8 relative overflow-x-hidden overflow-y-auto w-full">
-      {/* App Preview Image - fully contained */}
-      <div className="max-w-[900px] w-full mx-auto">
+    <main className="min-h-screen bg-white flex flex-col md:flex-row items-center justify-center px-4 py-8 relative overflow-x-hidden w-full text-center md:text-left">
+      {/* Image Preview */}
+      <div className="w-full max-w-[600px] md:max-w-[700px] xl:max-w-[750px] mx-auto px-2 md:px-4">
         <Image
           src="/ziioz-preview.png"
           alt="ZiiOZ App Preview"
@@ -17,6 +17,18 @@ export default function Home() {
           className="w-full h-auto object-contain"
           priority
         />
+      </div>
+
+      {/* Welcome Text Block */}
+      <div className="mt-6 md:mt-0 md:ml-8 max-w-xl">
+        <h1 className="text-3xl md:text-5xl font-bold mb-4">Welcome to ZiiOZ</h1>
+        <p className="text-lg md:text-xl leading-relaxed">
+          ZiiOZ is the next-gen platform where creators, communities, and trendsetters shape culture.
+          <br />
+          Share, discover, and connect through fast-moving video, viral discussions, and real-time creative power.
+          <br />
+          No noise. Just you, your moment, and the world.
+        </p>
       </div>
 
       {/* Settings Button */}
