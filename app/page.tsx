@@ -1,9 +1,7 @@
-import Image from 'next/image'
-
 export default function Home() {
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', padding: '2rem' }}>
-      <Image
+      <img
         src="/ziioz-preview.png"
         alt="ZiiOZ App Preview"
         width={450}
@@ -17,5 +15,5 @@ export default function Home() {
         <p>No noise. Just you, your moment, and the world.</p>
       </div>
     </div>
-  )
+  );
 }
