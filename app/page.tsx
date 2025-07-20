@@ -1,9 +1,8 @@
-// app/page.tsx
 export default function HomePage() {
   return (
     <main className="flex flex-col items-center justify-center min-h-screen bg-white text-black p-4">
       <img
-        src="/logo-black.png"
+        src="/settings/logo-black.png"
         alt="ZiiOZ Logo"
         className="w-32 h-auto mb-4"
       />
@@ -13,7 +12,7 @@ export default function HomePage() {
         <span>Underground</span>
       </div>
       <img
-        src="/mockup-iphone-ziioz-tabs.png"
+        src="/settings/mockup-iphone-ziioz-tabs.png"
         alt="ZiiOZ App Preview"
         className="w-[300px] max-w-full rounded-xl shadow-lg mb-4"
       />
