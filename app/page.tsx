@@ -1,15 +1,11 @@
-import styles from './landing.module.css';
-
 export default function LandingPage() {
   return (
-    <main className="min-h-screen flex items-center justify-center px-6 py-12 bg-white text-black">
-      <div className="w-full flex justify-center items-center">
-        <img
-          src="/ziioz-preview.png"
-          alt="ZiiOZ Preview"
-          className={styles.pinchedImage}
-        />
-      </div>
+    <main className="min-h-screen flex items-center justify-center px-4 py-10 bg-white">
+      <img
+        src="/ziioz-preview.png"
+        alt="ZiiOZ Preview"
+        className="w-full max-w-[480px] md:max-w-[600px] h-auto object-contain"
+      />
     </main>
   );
 }
