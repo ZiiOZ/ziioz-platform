@@ -6,18 +6,19 @@ export default function Home() {
   const [open, setOpen] = useState(false);
 
   return (
-    <main className="min-h-screen bg-white flex items-center justify-center px-4 py-8 relative overflow-x-hidden w-full">
-      
-      {/* App Preview Image Only */}
-      <div className="w-full max-w-[500px] sm:max-w-[600px] md:max-w-[700px] xl:max-w-[750px] mx-auto">
-        <Image
-          src="/ziioz-preview.png"
-          alt="ZiiOZ App Preview"
-          width={800}
-          height={800}
-          className="w-full h-auto object-contain"
-          priority
-        />
+    <main className="min-h-screen bg-white flex items-center justify-center px-4 py-8 relative">
+      {/* Image centered with natural aspect ratio */}
+      <div className="w-full flex justify-center items-center">
+        <div className="w-full max-w-[500px] sm:max-w-[600px] md:max-w-[700px] xl:max-w-[750px]">
+          <Image
+            src="/ziioz-preview.png"
+            alt="ZiiOZ App Preview"
+            width={1000}
+            height={1000}
+            className="w-full h-auto object-contain mx-auto"
+            priority
+          />
+        </div>
       </div>
 
       {/* Settings Button */}
