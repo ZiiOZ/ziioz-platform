@@ -1,33 +1,21 @@
-import Image from "next/image";
+import Image from 'next/image'
 
 export default function Home() {
   return (
-    <main style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "2rem", minHeight: "100vh" }}>
-      {/* Left side: Phone image */}
-      <div style={{ flex: "1", display: "flex", justifyContent: "center" }}>
-        <Image
-  src="/ziioz-preview.png"
-  alt="ZiiOZ App Preview"
-  width={500}
-  height={500}
-  style={{ marginLeft: "2rem" }}
-/>
-
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', padding: '2rem' }}>
+      <Image
+        src="/ziioz-preview.png"
+        alt="ZiiOZ App Preview"
+        width={450}
+        height={450}
+        style={{ marginRight: "3rem", borderRadius: "1rem" }}
+      />
+      <div>
+        <h1>Welcome to ZiiOZ</h1>
+        <p><strong>ZiiOZ</strong> is the next-gen platform where creators, communities, and trendsetters shape culture.</p>
+        <p>Share, discover, and connect through fast-moving video, viral discussions, and real-time creative power.</p>
+        <p>No noise. Just you, your moment, and the world.</p>
       </div>
-
-      {/* Right side: About ZiiOZ */}
-      <div style={{ flex: "1", paddingLeft: "2rem" }}>
-        <h1 style={{ fontSize: "2.5rem", marginBottom: "1rem" }}>Welcome to <span style={{ fontWeight: "bold" }}>ZiiOZ</span></h1>
-        <p style={{ fontSize: "1.2rem", marginBottom: "1rem" }}>
-          ZiiOZ is the next-gen platform where creators, communities, and trendsetters shape culture.
-        </p>
-        <p style={{ fontSize: "1.1rem", marginBottom: "1rem" }}>
-          Share, discover, and connect through fast-moving video, viral discussions, and real-time creative power.
-        </p>
-        <p style={{ fontSize: "1.1rem" }}>
-          No noise. Just you, your moment, and the world.
-        </p>
-      </div>
-    </main>
-  );
+    </div>
+  )
 }
