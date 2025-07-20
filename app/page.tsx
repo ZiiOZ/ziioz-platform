@@ -6,9 +6,9 @@ export default function Home() {
   const [open, setOpen] = useState(false);
 
   return (
-    <main className="min-h-screen bg-white flex flex-col items-center justify-center px-4 py-8 relative overflow-hidden">
-      {/* App Preview Image - responsive & tidy */}
-      <div className="max-w-[900px] w-full overflow-hidden">
+    <main className="min-h-screen bg-white flex flex-col items-center justify-center px-4 py-8 relative overflow-x-hidden overflow-y-auto w-full">
+      {/* App Preview Image - fully contained */}
+      <div className="max-w-[900px] w-full mx-auto">
         <Image
           src="/ziioz-preview.png"
           alt="ZiiOZ App Preview"
