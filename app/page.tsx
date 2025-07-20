@@ -6,10 +6,11 @@ export default function Home() {
   const [open, setOpen] = useState(false);
 
   return (
-    <main className="min-h-screen bg-white flex items-center justify-center px-4 py-8 relative">
-      {/* Image centered with natural aspect ratio */}
-      <div className="w-full flex justify-center items-center">
-        <div className="w-full max-w-[500px] sm:max-w-[600px] md:max-w-[700px] xl:max-w-[750px]">
+    <main className="min-h-screen bg-white flex flex-col items-center justify-center p-4 relative overflow-x-hidden">
+      {/* Image + Text block */}
+      <div className="flex flex-col md:flex-row items-center justify-center w-full max-w-7xl gap-8">
+        {/* Image Section */}
+        <div className="w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl">
           <Image
             src="/ziioz-preview.png"
             alt="ZiiOZ App Preview"
@@ -18,6 +19,20 @@ export default function Home() {
             className="w-full h-auto object-contain mx-auto"
             priority
           />
+        </div>
+
+        {/* Text Block */}
+        <div className="text-center md:text-left max-w-xl">
+          <h1 className="text-4xl font-bold mb-4">Welcome to<br /><span className="text-5xl">ZiiOZ</span></h1>
+          <p className="text-lg mb-3">
+            ZiiOZ is the next-gen platform where creators, communities, and trendsetters shape culture.
+          </p>
+          <p className="text-lg mb-3">
+            Share, discover, and connect through fast-moving video, viral discussions, and real-time creative power.
+          </p>
+          <p className="text-lg font-medium">
+            No noise. Just you, your moment, and the world.
+          </p>
         </div>
       </div>
 
