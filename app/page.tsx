@@ -1,12 +1,10 @@
-import logo from "@/assets/logo-black.png";
-import mockup from "@/assets/mockup-iphone.png";
 import Image from "next/image";
 
 export default function HomePage() {
   return (
     <main className="flex flex-col items-center justify-center min-h-screen bg-white text-black px-4 py-12">
       <Image
-        src={logo}
+        src="/logo-black.png"
         alt="ZiiOZ Logo"
         width={96}
         height={96}
@@ -20,7 +18,7 @@ export default function HomePage() {
       </div>
 
       <Image
-        src={mockup}
+        src="/mockup-iphone-ziioz-tabs.png"
         alt="ZiiOZ App Preview"
         width={300}
         height={600}
