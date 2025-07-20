@@ -1,3 +1,5 @@
+import styles from './landing.module.css';
+
 export default function LandingPage() {
   return (
     <main className="flex flex-col md:flex-row items-center justify-center min-h-screen px-4 md:px-12 py-10 overflow-hidden">
@@ -7,7 +9,7 @@ export default function LandingPage() {
           <img
             src="/ziioz-preview.png"
             alt="ZiiOZ Preview"
-            className="w-[220px] md:w-[280px] h-auto object-contain"
+            className={styles.pinchedImage}
           />
         </div>
 
