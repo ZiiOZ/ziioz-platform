@@ -1,9 +1,8 @@
 /* File: app/landing.module.css */
-
 .pinchedImage {
-  width: 180px !important;
+  width: 280px !important;
   height: auto !important;
-  max-width: none !important;
+  max-width: 100% !important;
   object-fit: contain;
   display: block;
 }
