@@ -1,60 +1,39 @@
 "use client";
 import Image from "next/image";
 import { useState } from "react";
-import { useEffect, useState as useStateReact } from "react";
 
 export default function Home() {
   const [open, setOpen] = useState(false);
-  const [isMobile, setIsMobile] = useStateReact(false);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   return (
-    <main className="min-h-screen bg-white flex flex-col items-center justify-center px-4 py-8 relative w-full overflow-hidden">
-      {/* Mobile View */}
-      {isMobile ? (
-        <div className="w-full max-w-xs">
+    <main className="min-h-screen bg-white flex flex-col items-center justify-center px-4 py-8 relative text-center md:text-left overflow-hidden w-full">
+      {/* Responsive Container */}
+      <div className="w-full max-w-screen-xl flex flex-col md:flex-row items-center justify-center gap-6">
+        
+        {/* Image (changes size based on screen) */}
+        <div className="w-full md:w-1/2 px-2">
           <Image
-            src="/ziioz-preview-mobile.png"
-            alt="ZiiOZ App Preview Mobile"
-            width={400}
-            height={800}
+            src="/ziioz-preview.png"
+            alt="ZiiOZ App Preview"
+            width={800}
+            height={600}
             className="w-full h-auto object-contain"
             priority
           />
         </div>
-      ) : (
-        // Desktop View
-        <div className="flex flex-col md:flex-row items-center justify-center w-full max-w-7xl px-4">
-          <div className="w-full max-w-[600px] md:max-w-[700px] xl:max-w-[750px]">
-            <Image
-              src="/ziioz-preview-desktop.png"
-              alt="ZiiOZ App Preview"
-              width={1024}
-              height={1024}
-              className="w-full h-auto object-contain"
-              priority
-            />
-          </div>
-          <div className="mt-6 md:mt-0 md:ml-8 max-w-xl text-center md:text-left">
-            <h1 className="text-3xl md:text-5xl font-bold mb-4">Welcome to ZiiOZ</h1>
-            <p className="text-lg md:text-xl leading-relaxed">
-              ZiiOZ is the next-gen platform where creators, communities, and trendsetters shape culture.
-              <br />
-              Share, discover, and connect through fast-moving video, viral discussions, and real-time creative power.
-              <br />
-              No noise. Just you, your moment, and the world.
-            </p>
-          </div>
+
+        {/* Text */}
+        <div className="w-full md:w-1/2 px-4">
+          <h1 className="text-3xl md:text-5xl font-bold mb-4">Welcome to ZiiOZ</h1>
+          <p className="text-lg md:text-xl leading-relaxed">
+            ZiiOZ is the next-gen platform where creators, communities, and trendsetters shape culture.
+            <br />
+            Share, discover, and connect through fast-moving video, viral discussions, and real-time creative power.
+            <br />
+            No noise. Just you, your moment, and the world.
+          </p>
         </div>
-      )}
+      </div>
 
       {/* Settings Button */}
       <div
