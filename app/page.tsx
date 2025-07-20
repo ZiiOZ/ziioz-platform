@@ -1,38 +1,28 @@
-import Image from "next/image";
-
-export default function Home() {
+export default function HomePage() {
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen bg-white text-black px-4 py-12">
-      {/* Logo */}
-      <Image
-        src="/logo-black.png"
-        alt="ZiiOZ Logo"
-        width={96}
-        height={96}
-        className="mb-6"
-      />
+    <main className="flex flex-col items-center justify-center min-h-screen bg-white text-black px-6 py-12">
+      <div className="flex flex-col md:flex-row gap-8 max-w-7xl w-full items-start">
+        {/* LEFT: Phones stacked */}
+        <div className="flex flex-col gap-6 items-center md:items-start w-full md:w-1/2">
+          <img src="/phones-preview.png" alt="ZiiOZ Phone Preview 1" className="w-full max-w-xs rounded-xl shadow-md" />
+          <img src="/phones-preview.png" alt="ZiiOZ Phone Preview 2" className="w-full max-w-xs rounded-xl shadow-md" />
+          <img src="/phones-preview.png" alt="ZiiOZ Phone Preview 3" className="w-full max-w-xs rounded-xl shadow-md" />
+          <img src="/phones-preview.png" alt="ZiiOZ Phone Preview 4" className="w-full max-w-xs rounded-xl shadow-md" />
+        </div>
 
-      {/* Tabs */}
-      <div className="flex gap-6 text-lg font-semibold mb-6">
-        <span className="hover:underline cursor-pointer">🔥 Trending</span>
-        <span className="hover:underline cursor-pointer">✨ Fresh</span>
-        <span className="hover:underline cursor-pointer">🖤 Underground</span>
+        {/* RIGHT: Text description */}
+        <div className="w-full md:w-1/2 text-left space-y-6">
+          <img src="/settings/logo-black.png" alt="ZiiOZ Logo" className="w-24 mb-2" />
+          <h1 className="text-3xl font-bold">Welcome to ZiiOZ</h1>
+          <p className="text-lg text-gray-800 leading-relaxed">
+            ZiiOZ is the next-gen platform where creators, communities, and trendsetters shape culture.
+            <br /><br />
+            Share, discover, and connect through fast-moving video, viral discussions, and real-time creative power.
+            <br /><br />
+            No noise. Just you, your moment, and the world.
+          </p>
+        </div>
       </div>
-
-      {/* iPhone Mockup */}
-      <Image
-        src="/mockup-iphone-ziioz-tabs.png"
-        alt="ZiiOZ App Preview"
-        width={300}
-        height={600}
-        className="rounded-2xl shadow-xl mb-6"
-      />
-
-      {/* Tagline */}
-      <p className="text-center text-lg text-gray-800 max-w-xl px-4 leading-relaxed">
-        <strong>ZiiOZ</strong> is the next-gen media platform where creators, communities,
-        and trendsetters come together. Experience the next wave of social.
-      </p>
     </main>
   );
 }
