@@ -7,3 +7,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     </html>
   );
 }
+export const metadata = {
+  title: 'ZiiOZ',
+  description: 'ZiiOZ Official Landing Page',
+  viewport: 'width=device-width, initial-scale=1',
+};
