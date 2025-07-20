@@ -11,7 +11,7 @@ export default function Home() {
       {/* App Preview Image */}
       <div className="max-w-[800px] w-full mx-auto">
         <Image
-          src="/ziioz-preview.png.png"
+          src="/ziioz-preview.png"
           alt="ZiiOZ App Preview"
           width={1536}
           height={1024}
