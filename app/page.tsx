@@ -7,7 +7,7 @@ export default function LandingPage() {
           <img
             src="/ziioz-preview.png"
             alt="ZiiOZ Preview"
-            className="w-full max-w-[320px] md:max-w-[400px] h-auto object-contain"
+            className="w-[220px] md:w-[280px] h-auto object-contain"
           />
         </div>
 
