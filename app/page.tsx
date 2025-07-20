@@ -1,22 +1,25 @@
+// app/page.tsx
 export default function HomePage() {
   return (
-    <div className="flex flex-col items-center justify-start min-h-screen p-4 bg-white">
+    <main className="flex flex-col items-center justify-center min-h-screen bg-white text-black p-4">
       <img
-        src="/settings/logo-black.png"
+        src="/logo-black.png"
         alt="ZiiOZ Logo"
-        className="w-24 mt-8 mb-4"
+        className="w-32 h-auto mb-4"
       />
-      <div className="text-lg font-semibold mb-4">
-        Trending&nbsp;&nbsp;Fresh&nbsp;&nbsp;Underground
+      <div className="flex gap-6 text-lg font-medium mb-6">
+        <span>Trending</span>
+        <span>Fresh</span>
+        <span>Underground</span>
       </div>
       <img
         src="/mockup-iphone-ziioz-tabs.png"
         alt="ZiiOZ App Preview"
-        className="max-w-xs border rounded-xl shadow-lg"
+        className="w-[300px] max-w-full rounded-xl shadow-lg mb-4"
       />
-      <p className="text-sm mt-6 text-center px-4">
+      <p className="text-center text-gray-700 text-sm">
         Experience the next wave of social.
       </p>
-    </div>
+    </main>
   );
 }
