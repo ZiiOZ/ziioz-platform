@@ -6,33 +6,30 @@ export default function Home() {
   const [open, setOpen] = useState(false);
 
   return (
-    <main className="min-h-screen bg-white flex flex-col items-center justify-center px-4 py-8 relative text-center md:text-left overflow-hidden w-full">
-      {/* Responsive Container */}
-      <div className="w-full max-w-screen-xl flex flex-col md:flex-row items-center justify-center gap-6">
-        
-        {/* Image (changes size based on screen) */}
-        <div className="w-full md:w-1/2 px-2">
-          <Image
-            src="/ziioz-preview.png"
-            alt="ZiiOZ App Preview"
-            width={800}
-            height={600}
-            className="w-full h-auto object-contain"
-            priority
-          />
-        </div>
+    <main className="min-h-screen bg-white px-4 py-8 flex flex-col items-center justify-center relative text-center overflow-hidden w-full">
+      
+      {/* Image Block */}
+      <div className="w-full max-w-[400px] md:max-w-[500px] lg:max-w-[600px] xl:max-w-[700px] mb-6">
+        <Image
+          src="/ziioz-preview.png"
+          alt="ZiiOZ App Preview"
+          width={800}
+          height={800}
+          className="w-full h-auto object-contain"
+          priority
+        />
+      </div>
 
-        {/* Text */}
-        <div className="w-full md:w-1/2 px-4">
-          <h1 className="text-3xl md:text-5xl font-bold mb-4">Welcome to ZiiOZ</h1>
-          <p className="text-lg md:text-xl leading-relaxed">
-            ZiiOZ is the next-gen platform where creators, communities, and trendsetters shape culture.
-            <br />
-            Share, discover, and connect through fast-moving video, viral discussions, and real-time creative power.
-            <br />
-            No noise. Just you, your moment, and the world.
-          </p>
-        </div>
+      {/* Text Block */}
+      <div className="max-w-xl px-2">
+        <h1 className="text-3xl md:text-5xl font-bold mb-4">Welcome to ZiiOZ</h1>
+        <p className="text-lg md:text-xl leading-relaxed">
+          ZiiOZ is the next-gen platform where creators, communities, and trendsetters shape culture.
+          <br />
+          Share, discover, and connect through fast-moving video, viral discussions, and real-time creative power.
+          <br />
+          No noise. Just you, your moment, and the world.
+        </p>
       </div>
 
       {/* Settings Button */}
