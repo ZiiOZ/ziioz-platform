@@ -6,12 +6,13 @@ export default function Home() {
       {/* Left side: Phone image */}
       <div style={{ flex: "1", display: "flex", justifyContent: "center" }}>
         <Image
-          src="/ae991b9a-440d-4b20-b77f-4ad50fd85fe8.png"
-          alt="ZiiOZ App Preview"
-          width={500}
-          height={500}
-          style={{ maxWidth: "100%", height: "auto", borderRadius: "16px" }}
-        />
+  src="/ziioz-preview.png"
+  alt="ZiiOZ App Preview"
+  width={500}
+  height={500}
+  style={{ marginLeft: "2rem" }}
+/>
+
       </div>
 
       {/* Right side: About ZiiOZ */}
