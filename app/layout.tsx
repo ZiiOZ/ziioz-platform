@@ -18,9 +18,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <img
             src="/file.svg"
             alt="Settings"
-            width={24}
-            height={24}
-            className="opacity-70 hover:opacity-100"
+            width="24"
+            height="24"
+            className="w-6 h-6 opacity-70 hover:opacity-100"
+            style={{ maxWidth: "24px", maxHeight: "24px" }}
           />
         </a>
 
