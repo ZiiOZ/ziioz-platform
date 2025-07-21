@@ -1,37 +1,31 @@
-// app/page.tsx
-import Image from "next/image";
+// File: app/page.tsx
 
 export default function LandingPage() {
   return (
-    <main className="flex flex-col items-center justify-center w-full min-h-screen px-6 py-10 bg-white">
-      {/* Logo */}
-      <Image
-        src="/logo-black.png"
-        alt="ZiiOZ Logo"
-        width={100}
-        height={100}
-        className="mb-8"
+    <main className="flex flex-col items-center justify-center w-full min-h-screen px-4 py-10">
+      <img
+        src="/ziioz-preview.png"
+        alt="ZiiOZ App Preview"
+        className="w-full max-w-xl mb-8 object-contain"
       />
 
-      {/* Preview Image */}
-      <div className="w-full max-w-sm">
-        <Image
-          src="/image/p9.png"
-          alt="ZiiOZ Preview"
-          width={600}
-          height={600}
-          className="w-full object-contain rounded-xl shadow-md"
-        />
-      </div>
+      <h1 className="text-3xl md:text-4xl font-bold text-center mb-4">
+        Welcome to ZiiOZ
+      </h1>
 
-      {/* Settings Button + Download Badges if needed */}
-      <div className="mt-10 text-center text-sm text-gray-500">
-        <p>Settings | Terms | Privacy</p>
-        <div className="mt-4 flex justify-center gap-4">
-          <img src="/image/appstore.png" alt="App Store" className="h-10" />
-          <img src="/image/googleplay.png" alt="Google Play" className="h-10" />
-        </div>
-      </div>
+      <p className="text-center text-base md:text-lg max-w-xl mb-4">
+        ZiiOZ is the next-gen platform where creators, communities, and trendsetters shape culture.
+      </p>
+      <p className="text-center text-sm md:text-base max-w-xl mb-2">
+        Share, discover, and connect through fast-moving video, vivid discussions, and real-time creative posts.
+      </p>
+      <p className="text-center text-sm md:text-base max-w-xl mb-6">
+        No noise. Just you, your moment, and the world.
+      </p>
+
+      <a href="/settings" className="text-sm text-purple-600 underline">
+        Settings
+      </a>
     </main>
   );
 }
