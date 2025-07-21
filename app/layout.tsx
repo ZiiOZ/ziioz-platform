@@ -14,11 +14,13 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="en">
       <body className="bg-white text-black relative">
         {/* Settings Icon - top right */}
-        <a href="/settings" className="absolute top-4 right-4">
+        <a href="/settings" className="absolute top-4 right-4 z-50">
           <img
             src="/file.svg"
             alt="Settings"
-            className="w-6 h-6 opacity-70 hover:opacity-100"
+            width={24}
+            height={24}
+            className="opacity-70 hover:opacity-100"
           />
         </a>
 
