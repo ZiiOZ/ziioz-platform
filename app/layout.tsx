@@ -13,15 +13,21 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <body className="bg-white text-black relative">
-        {/* Settings Icon - Inline SVG only (no external file used) */}
-        <a href="/settings" className="absolute top-4 right-4 z-50 w-6 h-6 opacity-70 hover:opacity-100">
+        {/* Settings Icon - Fixed size, safe mobile constraints */}
+        <a
+          href="/settings"
+          className="absolute top-4 right-4 z-50"
+          aria-label="Settings"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="w-full h-full"
+            width="24"
+            height="24"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
-            strokeWidth={2}
+            strokeWidth="2"
+            className="text-black opacity-70 hover:opacity-100"
           >
             <path
               strokeLinecap="round"
@@ -35,6 +41,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             />
           </svg>
         </a>
+
         {children}
       </body>
     </html>
