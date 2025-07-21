@@ -1,6 +1,9 @@
-import "./globals.css";
+// File: app/layout.tsx
 
-export const metadata = {
+import "./globals.css";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
   title: "ZiiOZ",
   description: "ZiiOZ Official Landing Page",
   viewport: "width=device-width, initial-scale=1",
@@ -9,16 +12,7 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="bg-white text-black relative">
-        {/* Safe Settings Link (top-right) */}
-        <a
-          href="/settings"
-          className="absolute top-4 right-4 text-sm underline text-gray-500 hover:text-black"
-        >
-          Settings
-        </a>
-
-        {/* Page Content */}
+      <body className="bg-white text-black overflow-x-hidden">
         {children}
       </body>
     </html>
