@@ -1,29 +1,36 @@
-// app/settings/page.tsx
+// app/page.tsx
+import Image from "next/image";
 
-export default function SettingsPage() {
+export default function LandingPage() {
   return (
-    <main className="flex flex-col items-center justify-start px-6 py-10 min-h-screen">
-      <h1 className="text-3xl font-bold mb-6">ZiiOZ Settings</h1>
+    <main className="flex flex-col items-center justify-center w-full min-h-screen px-6 py-10 bg-white">
+      {/* Logo */}
+      <Image
+        src="/logo-black.png"
+        alt="ZiiOZ Logo"
+        width={100}
+        height={100}
+        className="mb-8"
+      />
 
-      <div className="text-sm text-gray-700 max-w-2xl space-y-4">
-        <p>
-          Manage your app preferences, terms, and platform support below. This section is provided for
-          transparency and user confidence.
-        </p>
-        <p>
-          <strong>Developer:</strong> The Trustee for the W&amp;R Buhagiar Family Trust — ABN: 34 392 752 670
-        </p>
-        <p>
-          <strong>Support:</strong> Please contact us at <a href="mailto:support@ziioz.com" className="text-blue-600 underline">support@ziioz.com</a> for any questions, technical assistance, or legal matters.
-        </p>
-        <p>
-          <strong>Privacy Policy & Terms:</strong> ZiiOZ is committed to protecting user data, identity, and media.
-          We do not sell personal information or likeness without explicit consent. See our terms and privacy policy
-          for more information.
-        </p>
-        <p>
-          This page exists to assist App Store and Play Store reviewers in verifying our platform details, developer legitimacy, and compliance.
-        </p>
+      {/* Preview Image */}
+      <div className="w-full max-w-sm">
+        <Image
+          src="/image/p9.png"
+          alt="ZiiOZ Preview"
+          width={600}
+          height={600}
+          className="w-full object-contain rounded-xl shadow-md"
+        />
+      </div>
+
+      {/* Settings Button + Download Badges if needed */}
+      <div className="mt-10 text-center text-sm text-gray-500">
+        <p>Settings | Terms | Privacy</p>
+        <div className="mt-4 flex justify-center gap-4">
+          <img src="/image/appstore.png" alt="App Store" className="h-10" />
+          <img src="/image/googleplay.png" alt="Google Play" className="h-10" />
+        </div>
       </div>
     </main>
   );
