@@ -2,22 +2,18 @@
 
 export default function LandingPage() {
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen px-6 py-10">
+    <main className="flex flex-col items-center justify-center min-h-screen px-6 py-10 relative">
+      {/* Settings Icon */}
+      <a href="/settings" className="absolute top-4 right-4">
+        <img src="/file.svg" alt="Settings" className="w-6 h-6 opacity-70 hover:opacity-100" />
+      </a>
+
+      {/* Fullscreen Image Only */}
       <img
         src="/ziioz-preview.png"
-        alt="ZiiOZ Preview"
-        className="w-full max-w-md mb-8 object-contain"
+        alt="ZiiOZ App Preview"
+        className="w-full max-w-md object-contain"
       />
-
-      <h1 className="text-3xl font-bold mb-4">Welcome to ZiiOZ</h1>
-      <p className="text-center max-w-xl text-lg">
-        Where creators, moments, and movements converge.
-      </p>
-
-      <div className="mt-10 text-sm space-x-4">
-        <a href="/terms" className="underline">Terms</a>
-        <a href="/privacy" className="underline">Privacy</a>
-      </div>
     </main>
   );
 }
