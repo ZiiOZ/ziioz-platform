@@ -13,7 +13,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <body className="bg-white text-black relative">
-        {/* Settings Icon - Inline SVG, no external file */}
+        {/* Settings Icon - Inline SVG only (no external file used) */}
         <a href="/settings" className="absolute top-4 right-4 z-50 w-6 h-6 opacity-70 hover:opacity-100">
           <svg
             xmlns="http://www.w3.org/2000/svg"
