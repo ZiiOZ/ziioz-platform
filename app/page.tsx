@@ -10,9 +10,10 @@ export default function LandingPage() {
       <Image
         src="/ziioz-main-preview.png"
         alt="ZiiOZ Preview"
-        width={400}
-        height={300}
-        className="object-contain w-full max-w-md mb-8"
+        width={512}
+        height={384}
+        className="object-contain w-full max-w-lg mb-8"
+        priority
       />
 
       {/* Text Content */}
