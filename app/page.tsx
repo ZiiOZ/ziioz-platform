@@ -2,11 +2,11 @@
 
 export default function LandingPage() {
   return (
-    <main className="flex items-center justify-center min-h-screen bg-white px-4">
+    <main className="flex flex-col items-center justify-center min-h-screen px-6 py-10 bg-white text-black">
       <img
         src="/ziioz-main-preview.png"
         alt="ZiiOZ App Preview"
-        className="w-full max-w-xl object-contain"
+        className="w-full max-w-3xl object-contain"
       />
     </main>
   );
