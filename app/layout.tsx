@@ -1,40 +1,31 @@
 // File: app/layout.tsx
 
+import Link from 'next/link';
 import './globals.css';
-import type { Metadata } from 'next';
-import { ReactNode } from 'react';
+import { Inter } from 'next/font/google';
 
-export const metadata: Metadata = {
+const inter = Inter({ subsets: ['latin'] });
+
+export const metadata = {
   title: 'ZiiOZ',
-  description: 'ZiiOZ Official Landing Page',
+  description: 'Welcome to ZiiOZ',
 };
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="bg-white text-black relative">
-        {/* Settings Icon - Bigger and Inline SVG */}
-        <a href="/settings" className="absolute top-4 right-4 z-50 w-10 h-10 opacity-70 hover:opacity-100">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-full h-full"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
+      <body className={inter.className}>
+        {/* Settings Button Top Left */}
+        <div className="absolute top-4 left-4 z-50">
+          <Link
+            href="/settings"
+            className="text-black text-4xl hover:text-gray-700 transition-all"
+            aria-label="Settings"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M12 15.5a3.5 3.5 0 100-7 3.5 3.5 0 000 7z"
-            />
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M19.4 15a1.77 1.77 0 01.33 1.94l-.24.42a2.25 2.25 0 01-2.94.94 8.99 8.99 0 01-2.15 1.25 2.25 2.25 0 01-2.26-.24l-.43-.24a1.77 1.77 0 01-1.94.33l-.42-.24a2.25 2.25 0 01-.94-2.94 8.99 8.99 0 01-1.25-2.15 2.25 2.25 0 01.24-2.26l.24-.43a1.77 1.77 0 01-.33-1.94l.24-.42a2.25 2.25 0 012.94-.94 8.99 8.99 0 012.15-1.25 2.25 2.25 0 012.26.24l.43.24a1.77 1.77 0 011.94-.33l.42.24a2.25 2.25 0 01.94 2.94 8.99 8.99 0 011.25 2.15 2.25 2.25 0 01-.24 2.26l-.24.43z"
-            />
-          </svg>
-        </a>
+            ⚙️
+          </Link>
+        </div>
+
         {children}
       </body>
     </html>
