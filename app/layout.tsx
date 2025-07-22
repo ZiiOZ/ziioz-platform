@@ -1,31 +1,27 @@
 // File: app/layout.tsx
 
-import Link from 'next/link';
 import './globals.css';
-import { Inter } from 'next/font/google';
+import type { Metadata } from 'next';
+import { ReactNode } from 'react';
+import Link from 'next/link';
+import { FiSettings } from 'react-icons/fi';
 
-const inter = Inter({ subsets: ['latin'] });
-
-export const metadata = {
+export const metadata: Metadata = {
   title: 'ZiiOZ',
-  description: 'Welcome to ZiiOZ',
+  description: 'ZiiOZ Official Landing Page',
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        {/* Settings Button Top Left */}
-        <div className="absolute top-4 left-4 z-50">
-          <Link
-            href="/settings"
-            className="text-black text-4xl hover:text-gray-700 transition-all"
-            aria-label="Settings"
-          >
-            ⚙️
-          </Link>
-        </div>
-
+      <body className="bg-white text-black relative">
+        {/* Settings Button - top right corner */}
+        <Link
+          href="/settings"
+          className="fixed top-4 right-4 z-50 hover:opacity-90 transition"
+        >
+          <FiSettings size={36} className="text-gray-800 drop-shadow-md" />
+        </Link>
         {children}
       </body>
     </html>
