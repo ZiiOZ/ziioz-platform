@@ -23,7 +23,10 @@
       }
     ],
     "paths": {
-      "@/*": ["./*", "./src/*"]
+      "@/*": [
+        "./*",
+        "./src/*"
+      ]
     }
   },
   "include": [
@@ -38,5 +41,6 @@
   ],
   "exclude": [
     "node_modules"
-  ]
+  ],
+  "extends": "expo/tsconfig.base"
 }

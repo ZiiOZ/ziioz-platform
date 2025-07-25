@@ -1,29 +1,26 @@
 // File: app/layout.tsx
 
-import './globals.css';
-import type { Metadata } from 'next';
-import { ReactNode } from 'react';
-import Link from 'next/link';
-import { FiSettings } from 'react-icons/fi';
+import { Slot } from 'expo-router';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { View, StyleSheet } from 'react-native';
 
-export const metadata: Metadata = {
-  title: 'ZiiOZ',
-  description: 'ZiiOZ Official Landing Page',
-};
-
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default function Layout() {
   return (
-    <html lang="en">
-      <body className="bg-white text-black relative">
-        {/* Settings Button - top right corner */}
-        <Link
-          href="/settings"
-          className="fixed top-4 right-4 z-50 hover:opacity-90 transition"
-        >
-          <FiSettings size={36} className="text-gray-800 drop-shadow-md" />
-        </Link>
-        {children}
-      </body>
-    </html>
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.container}>
+        <Slot />
+      </View>
+    </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#ffffff',
+  },
+  container: {
+    flex: 1,
+    padding: 16,
+  },
+});
