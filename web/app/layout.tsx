@@ -1,4 +1,5 @@
-import NavBar from '../components/NavBar' // if this path is correct
+import NavBar from '@/components/navbar'; // ✅ lowercase
+
 
 
 export const metadata = {

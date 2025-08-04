@@ -1,6 +1,4 @@
-'use client'
-
-import FeedCard from '../../../components/FeedCard'
+import FeedCard from '@/components/feedcard'; // ✅ lowercase
 
 
 
