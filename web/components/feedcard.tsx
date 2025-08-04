@@ -1,3 +1,4 @@
+// web/components/FeedCard.tsx
 export default function FeedCard({ title, content }: { title: string, content: string }) {
   return (
     <div style={{
@@ -13,5 +14,5 @@ export default function FeedCard({ title, content }: { title: string, content: s
       <h3 style={{ margin: 0 }}>{title}</h3>
       <p>{content}</p>
     </div>
-  )
+  );
 }

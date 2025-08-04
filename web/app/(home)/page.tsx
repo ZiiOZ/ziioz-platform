@@ -1,6 +1,8 @@
 'use client'
 
-import FeedCard from '../../components/FeedCard'
+import FeedCard from '../../../components/FeedCard'
+
+
 
 export default function HomePage() {
   const posts = [

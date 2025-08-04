@@ -1,4 +1,5 @@
-import NavBar from '../components/NavBar'
+import NavBar from '../components/NavBar' // if this path is correct
+
 
 export const metadata = {
   title: 'ZiiOZ',

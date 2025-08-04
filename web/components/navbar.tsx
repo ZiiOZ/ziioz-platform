@@ -1,15 +1,16 @@
-'use client'
+// web/components/NavBar.tsx
+'use client';
 
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 const tabs = [
   { href: '/', label: 'Feed' },
   { href: '/settings', label: 'Settings' },
-]
+];
 
 export default function NavBar() {
-  const pathname = usePathname()
+  const pathname = usePathname();
 
   return (
     <nav style={{ display: 'flex', justifyContent: 'center', gap: '2rem', padding: '1rem 0', borderBottom: '1px solid #eee' }}>
@@ -27,5 +28,5 @@ export default function NavBar() {
         </Link>
       ))}
     </nav>
-  )
+  );
 }
