@@ -1,11 +1,13 @@
+// src/utils/sendEmail.ts
 import { ServerClient } from "postmark";
 
+// Initialize Postmark client with your API token
 const client = new ServerClient(process.env.POSTMARK_SERVER_API_TOKEN!);
 
 /**
- * Send a welcome email to the new user.
- * @param to The recipient's email address.
- * @param verificationLink The Supabase email verification URL.
+ * Sends a welcome email using Postmark template.
+ * @param to - The recipient's email address.
+ * @param verificationLink - The Supabase email verification URL.
  */
 export async function sendWelcomeEmail(to: string, verificationLink: string) {
   await client.sendEmailWithTemplate({
