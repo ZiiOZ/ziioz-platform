@@ -3,9 +3,7 @@
 import Stripe from 'stripe';
 import { NextResponse } from 'next/server';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2023-08-16',
-});
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!); // ✅ clean
 
 const priceMap: Record<string, string> = {
   boost: 'price_XXXXX',      // Replace with your actual Boost price ID
