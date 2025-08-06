@@ -1,9 +1,7 @@
-import { View, Text } from 'react-native';
-
 export default function ZiiPaySettings() {
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>ZiiPay Settings ⚙️</Text>
-    </View>
+    <div className="p-8">
+      <h1 className="text-2xl font-bold">ZiiPay Settings</h1>
+    </div>
   );
 }
