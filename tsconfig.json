@@ -13,9 +13,9 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "baseUrl": ".", // ✅ important
+    "baseUrl": ".", // ✅ Allows root-based imports
     "paths": {
-      "@/*": ["src/*"] // ✅ correct mapping
+      "@/*": ["./*"] // ✅ Points to root folders (not src/)
     },
     "plugins": [
       {
