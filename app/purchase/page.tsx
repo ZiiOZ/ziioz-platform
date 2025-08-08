@@ -1,46 +1,51 @@
-// app/purchase/page.tsx
+'use client'
 
-'use client';
-
-import { useState } from 'react';
+import { useState } from 'react'
 
 export default function PurchasePage() {
-  const [selected, setSelected] = useState('boost');
-  const [loading, setLoading] = useState(false);
+  const [type, setType] = useState('boost')
 
-  const handleCheckout = async () => {
-    setLoading(true);
+  const handlePurchase = async () => {
     const res = await fetch('/api/create-checkout-session', {
       method: 'POST',
-      body: JSON.stringify({ type: selected }),
-    });
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ type }),
+    })
 
-    const { url } = await res.json();
-    window.location.href = url;
-  };
+    const data = await res.json()
+    if (data?.url) {
+      window.location.href = data.url
+    } else {
+      alert('Something went wrong creating checkout session.')
+    }
+  }
 
   return (
-    <main className="p-6 max-w-xl mx-auto text-black">
-      <h1 className="text-3xl font-bold mb-4">🚀 Promote Your Post</h1>
-      <p className="mb-6">Choose a promotion type to supercharge your visibility.</p>
+    <main style={{ padding: 40 }}>
+      <h1>🚀 ZiiOZ Promotions</h1>
+      <p>Promote your post with one of our premium tools.</p>
 
+      <label style={{ display: 'block', marginTop: 20 }}>Choose Promotion Type:</label>
       <select
-        className="border px-3 py-2 rounded w-full mb-4"
-        value={selected}
-        onChange={(e) => setSelected(e.target.value)}
+        value={type}
+        onChange={(e) => setType(e.target.value)}
+        style={{ padding: '8px', fontSize: '16px' }}
       >
         <option value="boost">🔥 Boost ($10)</option>
         <option value="ziipin">📌 ZiiPin ($3)</option>
         <option value="ziishout">📣 ZiiShout ($5)</option>
       </select>
 
-      <button
-        onClick={handleCheckout}
-        disabled={loading}
-        className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800 w-full"
-      >
-        {loading ? 'Redirecting...' : `Purchase ${selected.charAt(0).toUpperCase() + selected.slice(1)}`}
+      <br /><br />
+      <button onClick={handlePurchase} style={{ padding: '10px 20px', fontSize: '16px' }}>
+        Purchase {type === 'boost'
+          ? 'Boost'
+          : type === 'ziipin'
+          ? 'ZiiPin'
+          : 'ZiiShout'}
       </button>
     </main>
-  );
+  )
 }
