@@ -1,4 +1,4 @@
-import PurchaseButtons from '@/app/components/PurchaseButtons';
+import PurchaseButtons from '@/components/PurchaseButtons';
 
 export default function PricingPage() {
   return (
